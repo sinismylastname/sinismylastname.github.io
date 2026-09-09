@@ -22,8 +22,4 @@ portfolio project, and includes a digital resume and contact form.
 - Custom accessible SVG artwork
 
 ## Publish
-
-After creating a public repository named `<username>.github.io`, replace
-`<username>` below with your GitHub username:
-
-[Visit the website](https://<username>.github.io)
+[Visit the website](https://sinismylastname.github.io)
