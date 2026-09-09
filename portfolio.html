@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Web development projects by Andy Sin." />
+    <meta
+      name="description"
+      content="Robotics, hardware, and game development projects by Andy Sin."
+    />
     <title>Andy Sin | Portfolio</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -14,7 +17,9 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="blog.html">Blog</a></li>
         <li>
-          <a class="active" aria-current="page" href="portfolio.html">Portfolio</a>
+          <a class="active" aria-current="page" href="portfolio.html"
+            >Portfolio</a
+          >
         </li>
         <li><a href="resume.html">Resume</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -23,29 +28,114 @@
 
     <main>
       <h1 class="page-title">Portfolio</h1>
-      <div class="project">
-        <a class="project-image" href="index.html">
-          <img
-            src="project-preview.svg"
-            alt="Preview illustration of Andy's personal website"
-            width="640"
-            height="400"
-          />
-        </a>
-        <div class="project-details">
-          <p class="project-name">Personal Website</p>
-          <p class="project-description">
-            A responsive five-page portfolio made with semantic HTML and CSS.
-            Built through the Hack4Impact Starter Pack and designed to grow with
-            my experience.
-          </p>
-          <p class="tech-list">HTML · CSS · Flexbox · GitHub Pages</p>
-          <a class="button" href="index.html">Learn More</a>
-        </div>
+      <p class="resume-intro">
+        I like building at the intersection of code, hardware, and the people
+        who use it. Here are a few things I have made and helped lead.
+      </p>
+
+      <div class="project-grid">
+        <article class="project">
+          <a class="project-image" href="index.html">
+            <img
+              src="images/project-preview.svg"
+              alt="Frutiger styled preview of Andy's personal website"
+              width="640"
+              height="400"
+            />
+          </a>
+          <div class="project-details">
+            <p class="project-name">hack4impact StarterPack</p>
+            <p class="project-description">
+              A responsive five-page portfolio made with semantic HTML and CSS.
+              Built through the Hack4Impact Starter Pack and designed to grow
+              with my experience.
+            </p>
+            <p class="tech-list">HTML · CSS · Flexbox · GitHub Pages</p>
+          </div>
+        </article>
+
+        <article class="project">
+          <a class="project-image" href="index.html">
+            <img
+              src="images/sinnerpad.png"
+              alt="Preview of the SinnerPad macropad"
+              width="640"
+              height="400"
+            />
+          </a>
+          <div class="project-details">
+            <p class="project-name">SinnerPad</p>
+            <p class="project-description">
+              A four-key digital-art macropad designed and built in one day as
+              my first self-directed hardware project. I made the PCB in KiCad,
+              designed a two-piece enclosure in Onshape, then soldered and
+              tested every part.
+            </p>
+            <p class="tech-list">
+              KiCad · RP2040 · KMK · SK6812MINI-E · Onshape
+            </p>
+          </div>
+        </article>
+
+        <article class="project">
+          <a class="project-image" href="index.html">
+            <img
+              src="images/lockednloaded.png"
+              alt="Preview of the Game Title Screen for the Shiba Arcade Game"
+              width="640"
+              height="400"
+            />
+          </a>
+          <div class="project-details">
+            <p class="project-name">Shiba Arcade Game & Custom Cabinet</p>
+            <p class="project-description">
+              A fixed-turret wave shooter built in Godot with GDScript,
+              randomized gameplay, upgrades, and original art/audio. I also
+              built, painted, wired, and soldered a Raspberry Pi arcade cabinet
+              for public play. The project placed in the top 30 of 8,000+
+              participants in Hack Club's international Shiba challenge.
+            </p>
+            <p class="tech-list">
+              Godot · GDScript · Raspberry Pi 4 · Electronics
+            </p>
+          </div>
+        </article>
+
+        <article class="project">
+          <a class="project-image" href="index.html">
+            <img
+              src="images/robot.jpg"
+              alt="Preview of the FRC robot"
+              width="640"
+              height="400"
+            />
+          </a>
+          <div class="project-details">
+            <p class="project-name">FRC Team 3598 Robot Software</p>
+            <p class="project-description">
+              As lead programmer, I helped migrate the SEStematic Eliminators
+              from LabVIEW to command-based Java. The robot software included
+              swerve drive, AprilTag vision fusion, autonomous path planning,
+              and auto-aiming systems.
+            </p>
+            <p class="tech-list">
+              Java · WPILib · Limelight · AprilTags · PathPlanner
+            </p>
+          </div>
+        </article>
       </div>
+
+      <p class="github-line">
+        More work and code:
+        <a
+          href="https://github.com/sinismylastname"
+          target="_blank"
+          rel="noreferrer"
+          >github.com/sinismylastname</a
+        >
+      </p>
     </main>
 
     <footer class="footer">© 2026 Andy Sin | All Rights Reserved</footer>
   </body>
 </html>
-
