@@ -1,8 +1,57 @@
 <!doctype html>
-
-<html>
+<html lang="en">
   <head>
-    <title>Le Website</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Andy Sin's personal website and web development portfolio."
+    />
+    <title>Andy Sin | Home</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
-  <body></body>
+  <body>
+    <nav class="navbar" aria-label="Primary navigation">
+      <h1 class="logo"><a href="index.html">AS</a></h1>
+      <ul class="nav-list">
+        <li><a class="active" aria-current="page" href="index.html">Home</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <h1 class="page-title">Hello, world!</h1>
+      <div class="about">
+        <div class="about-image">
+          <img
+            src="andy-avatar.svg"
+            alt="Illustrated avatar with the initials AS"
+            width="360"
+            height="360"
+          />
+        </div>
+        <div class="about-text">
+          <p class="eyebrow">Computer Engineering · Cal Poly SLO</p>
+          <h2>I’m Andy Sin.</h2>
+          <p>
+            I’m a <strong>first-year Computer Engineering student</strong> who
+            enjoys programming, web development, and learning how software and
+            hardware fit together.
+          </p>
+          <p>
+            I built this site while completing the
+            <em>Hack4Impact Starter Pack</em>. It is my first step toward making
+            useful, thoughtful technology for real people.
+          </p>
+          <a class="button" href="portfolio.html">See what I’m building</a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">© 2026 Andy Sin | All Rights Reserved</footer>
+  </body>
 </html>
+

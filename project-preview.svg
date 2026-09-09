@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-labelledby="title desc">
+  <title id="title">Frutiger themed personal site preview</title>
+  <desc id="desc">A glossy aqua browser window with lime hills, bubbles, and an AS monogram.</desc>
+  <defs><linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8de3ff"/><stop offset="1" stop-color="#e8fff7"/></linearGradient><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dbff94"/><stop offset="1" stop-color="#86cd42"/></linearGradient></defs>
+  <rect width="1280" height="800" rx="42" fill="url(#b)"/><circle cx="1110" cy="142" r="98" fill="#fff" opacity=".7"/><circle cx="1028" cy="238" r="27" fill="#fff" opacity=".6"/>
+  <rect x="42" y="42" width="1196" height="716" rx="30" fill="#fff" fill-opacity=".68" stroke="#fff" stroke-width="5"/>
+  <path d="M42 151h1196" stroke="#fff" stroke-width="4"/><circle cx="91" cy="96" r="14" fill="#ef7e85"/><circle cx="134" cy="96" r="14" fill="#ffd56b"/><circle cx="177" cy="96" r="14" fill="#8ed74b"/>
+  <circle cx="120" cy="226" r="39" fill="#0098c1" stroke="#fff" stroke-width="4"/><text x="120" y="237" fill="#fff" font-family="Arial" font-size="30" font-weight="700" text-anchor="middle">AS</text>
+  <g fill="#27617c" opacity=".75"><rect x="735" y="213" width="82" height="17" rx="8"/><rect x="842" y="213" width="82" height="17" rx="8"/><rect x="949" y="213" width="82" height="17" rx="8"/><rect x="1056" y="213" width="82" height="17" rx="8"/></g>
+  <text x="88" y="418" fill="#123459" font-family="Arial" font-size="96" font-weight="800" letter-spacing="-5">Hello, world!</text><rect x="88" y="461" width="390" height="18" rx="9" fill="#009bb7" opacity=".8"/><rect x="88" y="505" width="445" height="14" rx="7" fill="#386b83" opacity=".45"/><rect x="88" y="540" width="382" height="14" rx="7" fill="#386b83" opacity=".45"/>
+  <rect x="88" y="590" width="200" height="57" rx="29" fill="#b9ed63"/><path d="M38 684c180-110 310-34 431 10 122 44 260 40 396-46 143-90 252-47 373 35v75H42z" fill="url(#g)" opacity=".94"/>
+  <rect x="807" y="325" width="303" height="286" rx="78" fill="#fff" fill-opacity=".68" stroke="#fff" stroke-width="4"/><text x="958" y="503" fill="#123459" font-family="Arial" font-size="122" font-weight="800" text-anchor="middle">AS</text><circle cx="1080" cy="395" r="30" fill="#fff" opacity=".7"/>
+</svg>
