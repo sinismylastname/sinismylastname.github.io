@@ -6,7 +6,7 @@ const INTERACTIVE_SELECTOR = "a, button, input, textarea, select";
 const CURSOR_IGNORE_SELECTOR = "[data-cursor-ignore]";
 const RELEASE_DISTANCE = 18;
 const MAX_TUG = 8;
-const FOLLOW_EASE = 0.16;
+const FOLLOW_EASE = 0.21;
 
 type CursorState = {
   x: number;
@@ -69,7 +69,7 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
         width: moveToward(current.width, desired.width),
         height: moveToward(current.height, desired.height),
         radius: moveToward(current.radius, desired.radius),
-        rotate: moveToward(current.rotate, desired.rotate, 0.12),
+        rotate: moveToward(current.rotate, desired.rotate, 0.16),
         active: desired.active,
         visible: desired.visible,
       };

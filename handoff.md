@@ -530,3 +530,19 @@ git diff --check
 ```
 
 No additional trace was available, so this handoff intentionally does not claim a numeric FPS, paint-time, or frame-time improvement. The next useful measurement would be a controlled before/after browser trace covering pointer movement, glass-card interaction, cursor morphing, scrolling, and stationary idle, but the implementation does not depend on obtaining another trace.
+
+
+### Cursor responsiveness tuning — September 2026
+
+The custom cursor and interactive-target morph were slightly too smooth, so their response was made modestly faster without changing the visual design or interaction bounds.
+
+Changes:
+
+- `app/src/components/CustomCursor.tsx`: increased `FOLLOW_EASE` from `0.16` to `0.21` so the cursor follows pointer movement more promptly.
+- `app/src/components/CustomCursor.tsx`: increased rotation interpolation from `0.12` to `0.16` so velocity rotation settles slightly faster.
+- `app/src/styles/components.css`: shortened cursor width, height, radius, color, and shadow transitions from `220ms` to `180ms`, with opacity reduced to `150ms`.
+- `app/src/styles/components.css`: shortened ghost size/opacity transitions from `180ms` to `150ms`.
+
+Cursor size, morph target bounds, release distance, velocity tug, rotation limits, native-cursor mode, reduced-motion behavior, and fine-pointer gating are unchanged.
+
+Validation after this tuning passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
