@@ -25,14 +25,14 @@ function moveToward(current: number, target: number, amount = FOLLOW_EASE) {
   return current + (target - current) * amount;
 }
 
-export function CustomCursor() {
+export function CustomCursor({ enabled }: { enabled: boolean }) {
   const cursorRef = useRef<HTMLDivElement>(null);
   const ghostRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<number | null>(null);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (reducedMotion || !window.matchMedia("(pointer: fine)").matches) return;
+    if (!enabled || reducedMotion || !window.matchMedia("(pointer: fine)").matches) return;
     const cursor = cursorRef.current;
     if (!cursor) return;
 
@@ -180,11 +180,14 @@ export function CustomCursor() {
       document.removeEventListener("focusin", onFocusIn);
       document.removeEventListener("focusout", onFocusOut);
       document.documentElement.removeEventListener("pointerleave", release);
-      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
     };
-  }, [reducedMotion]);
+  }, [enabled, reducedMotion]);
 
-  if (reducedMotion) return null;
+  if (!enabled || reducedMotion) return null;
   return createPortal(
     <>
       <div ref={cursorRef} className="custom-cursor" aria-hidden="true"><span /></div>

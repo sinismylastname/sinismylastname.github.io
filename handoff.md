@@ -409,3 +409,24 @@ Changes:
 No unsupported project claims were added. The StarterPack project remains based on existing portfolio content because it is not described in the supplied resume PDF.
 
 Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Cursor mode toggle update — September 2026
+
+Added a persistent bottom-left glass toggle so fine-pointer desktop users can choose between the smooth morphing cursor and the native browser cursor after concerns about responsiveness or familiarity with the custom interaction.
+
+Changes:
+
+- `app/src/components/AppShell.tsx`: owns the shared `nativeCursor` state, reads and writes the `andy-sin-portfolio-cursor-mode` local-storage key, applies `data-cursor-mode` to the document body, passes `enabled={!nativeCursor}` to `CustomCursor`, and renders the toggle.
+- `app/src/components/CursorModeToggle.tsx`: adds the fixed glass button with a clear `Cursor: Smooth` / `Cursor: Native` status, a real keyboard-operable button, `aria-pressed`, an accessible action label, and a visual switch indicator.
+- `app/src/components/CustomCursor.tsx`: accepts the shared enabled state, returns no portal when native mode is selected, includes the state in its effect lifecycle, and cancels any active animation frame when the mode changes.
+- `app/src/styles/components.css`: styles the bottom-left translucent glass control and restores native cursor values across body descendants and body-level portals when native mode is active.
+
+Behavior:
+
+- Smooth mode remains the default when no preference is stored.
+- Selecting native mode immediately removes the custom cursor portal and restores browser cursor behavior, including controls rendered through portals such as the notes modal.
+- The selected mode persists across page reloads through local storage. Storage errors are caught so private-browsing restrictions cannot break the interface.
+- The toggle is displayed only for fine pointers when reduced motion is not requested. Coarse-pointer and reduced-motion users continue to use the native cursor fallback without an unnecessary control.
+- Keyboard focus and activation remain available through the real button; the cursor toggle itself retains a visible aqua focus indicator.
+
+Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
