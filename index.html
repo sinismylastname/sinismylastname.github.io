@@ -12,7 +12,7 @@
   </head>
   <body>
     <nav class="navbar" aria-label="Primary navigation">
-      <h1 class="logo"><a href="index.html">AS</a></h1>
+      <div class="logo"><a href="index.html">AS</a></div>
       <ul class="nav-list">
         <li><a class="active" aria-current="page" href="index.html">Home</a></li>
         <li><a href="blog.html">Blog</a></li>
@@ -22,33 +22,40 @@
       </ul>
     </nav>
 
-    <main>
-      <h1 class="page-title">Hello, world!</h1>
-      <div class="about">
-        <div class="about-image">
-          <img
-            src="images/andy-avatar.svg"
-            alt="Illustrated avatar with the initials AS"
-            width="360"
-            height="360"
-          />
+    <main class="home-main">
+      <section class="sky-stage" aria-labelledby="home-title" aria-describedby="sky-stage-status">
+        <p id="sky-stage-status" class="sky-stage-status" role="status">
+          The sky-stage visual enhancement is unavailable, but all portfolio content remains available below.
+        </p>
+        <span class="sky-stage-bubble sky-stage-bubble-one" aria-hidden="true"></span>
+        <span class="sky-stage-bubble sky-stage-bubble-two" aria-hidden="true"></span>
+        <h1 id="home-title" class="page-title">Hello, world!</h1>
+        <div class="about">
+          <div class="about-image">
+            <img
+              src="images/andy-avatar.svg"
+              alt="Illustrated avatar with the initials AS"
+              width="360"
+              height="360"
+            />
+          </div>
+          <div class="about-text">
+            <p class="eyebrow">Computer Engineering · Cal Poly SLO</p>
+            <h2>I’m Andy Sin.</h2>
+            <p>
+              I’m a <strong>first-year Computer Engineering student</strong> who
+              enjoys programming, web development, and learning how software and
+              hardware fit together.
+            </p>
+            <p>
+              I built this site while completing the
+              <em>Hack4Impact Starter Pack</em>. It is my first step toward making
+              useful, thoughtful technology for real people.
+            </p>
+            <a class="button" href="portfolio.html">See what I’m building</a>
+          </div>
         </div>
-        <div class="about-text">
-          <p class="eyebrow">Computer Engineering · Cal Poly SLO</p>
-          <h2>I’m Andy Sin.</h2>
-          <p>
-            I’m a <strong>first-year Computer Engineering student</strong> who
-            enjoys programming, web development, and learning how software and
-            hardware fit together.
-          </p>
-          <p>
-            I built this site while completing the
-            <em>Hack4Impact Starter Pack</em>. It is my first step toward making
-            useful, thoughtful technology for real people.
-          </p>
-          <a class="button" href="portfolio.html">See what I’m building</a>
-        </div>
-      </div>
+      </section>
     </main>
 
     <footer class="footer">© 2026 Andy Sin | All Rights Reserved</footer>

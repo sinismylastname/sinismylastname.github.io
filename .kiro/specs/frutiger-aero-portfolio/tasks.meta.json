@@ -1,0 +1,387 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Refine design tokens and base document rules in `styles.css`": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099406801
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099413931
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099471578
+      }
+    ],
+    "1.2 Normalize the shared shell and landmark markup across all five HTML documents": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099407008
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099475239
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099512928
+      }
+    ],
+    "1.3 Implement the shared shell, typography, and focus presentation in `styles.css`": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099407162
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099516653
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099583317
+      }
+    ],
+    "1.4 Add structural navigation and landmark validation": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099407358
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099587663
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099758087
+      }
+    ],
+    "2.1 Consolidate glass surfaces and depth layering in `styles.css`": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099407649
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099589635
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099760127
+      }
+    ],
+    "2.2 Implement controls, fields, cards, and stable visual states in `styles.css`": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099407757
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099764003
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099828854
+      }
+    ],
+    "2.3 Implement the complete home sky-stage and its styling-failure indication": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099407909
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099832712
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099888402
+      }
+    ],
+    "2.4 Implement page-specific compositions in the existing HTML and `styles.css`": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099408023
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099892511
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099977582
+      }
+    ],
+    "2.5 Add content, semantics, and sky-stage regression checks": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099408162
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099981322
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100073393
+      }
+    ],
+    "3.1 Add isolated ambient layers and bounded visual-only animation": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099408272
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099983512
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100075932
+      }
+    ],
+    "3.2 Implement entrance, interaction, reduced-motion, and CSS-animation-failure rules": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099408397
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100079900
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100132327
+      }
+    ],
+    "3.3 Add motion, fallback, and decorative-isolation validation": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099408546
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100136441
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100488475
+      }
+    ],
+    "4.1 Complete mobile, desktop, and zoom behavior in `styles.css`": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099408687
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100139082
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100490862
+      }
+    ],
+    "4.2 Add layout-safety and state-bounds checks": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099408832
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100495411
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100881861
+      }
+    ],
+    "5.1 Preserve native navigation, forms, primary content, and enhanced-reading degradation": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099409070
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100497641
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100885889
+      }
+    ],
+    "5.2 Add fallback and progressive-baseline checks": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099409189
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100890778
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101077294
+      }
+    ],
+    "6.1 Execute final HTML and accessibility validation": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099409308
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100892905
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101080338
+      }
+    ],
+    "6.2 Run the complete property-oriented regression suite": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099409453
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101085355
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101145082
+      }
+    ],
+    "6.3 Run final visual, interaction, and print regression checks": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099409600
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101088622
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101147273
+      }
+    ],
+    "7. Checkpoint - Ensure all tests pass, ask the user if questions arise.": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099409904
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101152263
+      },
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101197986
+      }
+    ],
+    "1. Establish the shared HTML/CSS baseline and semantic shell": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789099758229
+      }
+    ],
+    "2. Build shared surfaces, controls, and page compositions": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100073661
+      }
+    ],
+    "3. Implement isolated decoration and CSS-primary motion": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100488607
+      }
+    ],
+    "4. Make responsive layout, focus priority, and no-shift behavior safe": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789100881968
+      }
+    ],
+    "5. Verify JavaScript-independent progressive baseline and static fallbacks": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101077426
+      }
+    ],
+    "6. Run integrated structural, accessibility, visual, and performance validation": [
+      {
+        "executionId": "c03c0813-4fbc-4f38-bb4d-154344d31186",
+        "chatSessionId": "sess_92b45817-4eb2-415b-94da-5b428a4672fa",
+        "timestamp": 1789101147396
+      }
+    ]
+  }
+}
