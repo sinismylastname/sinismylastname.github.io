@@ -7,7 +7,8 @@
     "dev": "vite --config vite.config.ts",
     "build": "tsc -p tsconfig.app.json && vite build --config vite.config.ts",
     "preview": "vite preview --config vite.config.ts",
-    "check": "tsc -p tsconfig.app.json --noEmit"
+    "check": "tsc -p tsconfig.app.json --noEmit",
+    "test": "python3 tests/validate_app.py"
   },
   "dependencies": {
     "motion": "12.23.12",

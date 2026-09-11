@@ -26,5 +26,5 @@ export function GlassSurface({
   const Component: any = as ?? "div";
   const surfaceRef = usePointerTilt<HTMLElement>(interactive);
   const classes = `glass-surface glass-${variant} ${interactive ? "is-interactive" : ""} ${className}`.trim();
-  return <Component ref={surfaceRef} className={classes} {...props}>{children}</Component>;
+  return <Component ref={surfaceRef} className={classes} data-cursor-interactive={interactive ? "true" : undefined} {...props}>{children}</Component>;
 }

@@ -27,6 +27,10 @@ export function usePointerTilt<T extends HTMLElement>(enabled = true) {
     };
 
     const onPointerMove = (event: PointerEvent) => {
+      if (event.target instanceof Element && event.target.closest("[data-tilt-ignore]")) {
+        reset();
+        return;
+      }
       const bounds = element.getBoundingClientRect();
       const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
       const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));

@@ -19,13 +19,13 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
         <p className="project-summary">{project.summary}</p>
         <div className="tech-list" aria-label="Technologies">{project.technologies.map((technology) => <span key={technology}>{technology}</span>)}</div>
         <div className="project-actions">
-          <button className="text-button" type="button" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)}>
+          <button className="text-button peek-button" type="button" data-tilt-ignore="true" aria-expanded={expanded} onClick={() => setExpanded((value) => !value)}>
             {expanded ? "Hide details" : "Peek inside"} <span aria-hidden="true">↗</span>
           </button>
           {project.links.source && <GlassButton href={project.links.source} target="_blank" rel="noreferrer">Source ↗</GlassButton>}
           {project.links.demo && <GlassButton href={project.links.demo} target="_blank" rel="noreferrer">Demo ↗</GlassButton>}
         </div>
-        {expanded && <p className="project-details">{project.details}</p>}
+        <p className={`project-details${expanded ? " is-expanded" : ""}`} aria-hidden={!expanded}>{project.details}</p>
       </div>
     </GlassSurface>
   );

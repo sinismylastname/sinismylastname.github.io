@@ -13,7 +13,7 @@ The React app provides:
 - Resume with the existing education, experience, skills, projects, honors, and PDF download
 - Contact with native browser validation
 
-The original root-level HTML/CSS site remains in the repository as a static rollback/reference baseline. The deploy workflow builds the interactive app into `dist/` and publishes that artifact through GitHub Pages.
+The React app is the only site implementation in the repository. It builds into `dist/` and publishes through GitHub Pages; the original static implementation was removed after the migration so there is one source of truth.
 
 ## Built with
 
