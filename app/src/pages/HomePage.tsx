@@ -10,31 +10,31 @@ export function HomePage({ onNavigate }: { onNavigate: (page: PageId) => void })
     <div className="page-content home-page">
       <section className="hero-layout" aria-labelledby="home-title">
         <div className="hero-copy">
-          <p className="eyebrow">Computer Engineering · Cal Poly SLO</p>
+          <p className="eyebrow">Computer Engineering · Cal Poly SLO · FIRST Alumni</p>
           <h1 id="home-title">Hello,<br /><span>world!</span></h1>
-          <p className="hero-lede">I’m Andy Sin — a first-year Computer Engineering student who enjoys making software, hardware, and playful things that people can actually use.</p>
+          <p className="hero-lede">I’m Andy Sin: a first-year Computer Engineering student who enjoys software, hardware, and believes that the <strong>STEM</strong> field is nothing more than <strong>pure</strong> <strong>wizardry</strong>.</p>
           <div className="hero-actions">
-            <GlassButton href="#work" onClick={() => onNavigate("work")}>See what I’m building <span aria-hidden="true">↗</span></GlassButton>
+            <GlassButton href="#work" onClick={() => onNavigate("work")}>See what I'm building <span aria-hidden="true">↗</span></GlassButton>
             <a className="quiet-link" href="#about" onClick={() => onNavigate("about")}>A little more about me</a>
           </div>
         </div>
         <GlassSurface variant="panel" interactive className="profile-card">
           <div className="profile-image-wrap"><img src={profileImage} alt="Illustrated avatar with the initials AS" width="360" height="360" /></div>
-          <div className="profile-note"><span className="status-dot" /> currently learning by building</div>
+          <div className="profile-note"><span className="status-dot" /> currently learning by doing (wink wink Cal Poly SLO)</div>
         </GlassSurface>
       </section>
 
       <section className="featured-section" aria-labelledby="featured-title">
         <div className="section-intro-row">
-          <div><p className="eyebrow">A few experiments</p><h2 id="featured-title">Things I’m building</h2></div>
+          <div><p className="eyebrow">A few experiments</p><h2 id="featured-title">Things I've Built</h2></div>
           <button className="text-button" type="button" onClick={() => onNavigate("work")}>View all work <span aria-hidden="true">→</span></button>
         </div>
-        <ProjectGrid featuredOnly />
+        <ProjectGrid />
       </section>
 
       <section className="interest-strip" aria-labelledby="interest-title">
         <GlassSurface variant="panel" className="interest-panel">
-          <div><p className="eyebrow">The current orbit</p><h2 id="interest-title">Curious about the edges between things.</h2></div>
+          <div><p className="eyebrow">The ponderings of today</p><h2 id="interest-title">Engineering is studying the limits of the universe to manifest creations from your mind.</h2></div>
           <div className="interest-list">{interests.map((interest) => <span key={interest}>{interest}</span>)}</div>
         </GlassSurface>
       </section>

@@ -3,6 +3,7 @@ import type { PageId } from "../data/site";
 import { AmbientBackground } from "./AmbientBackground";
 import { CustomCursor } from "./CustomCursor";
 import { Navigation } from "./Navigation";
+import { ScrollProgress } from "./ScrollProgress";
 
 export function AppShell({
   activePage,
@@ -16,6 +17,7 @@ export function AppShell({
   return (
     <div className="app-shell">
       <AmbientBackground />
+      <ScrollProgress />
       <CustomCursor />
       <Navigation activePage={activePage} onNavigate={onNavigate} />
       <main className="app-main" id="main-content" tabIndex={-1}>

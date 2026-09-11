@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { useEffect, useRef } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -153,23 +154,42 @@ export function CustomCursor() {
       }
       updateDesired(0, 0, 0, true);
     };
+    const onFocusIn = (event: FocusEvent) => {
+      const focused = event.target instanceof HTMLElement
+        ? event.target.closest<HTMLElement>(INTERACTIVE_SELECTOR)
+        : null;
+      if (!focused || focused.matches(CURSOR_IGNORE_SELECTOR)) return;
+      lockedTarget = focused;
+      updateDesired(0, 0, 0, true);
+    };
+    const onFocusOut = (event: FocusEvent) => {
+      const nextTarget = event.relatedTarget;
+      if (lockedTarget && (!(nextTarget instanceof Node) || !lockedTarget.contains(nextTarget))) release();
+    };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("scroll", onViewportChange, { passive: true });
     window.addEventListener("resize", onViewportChange, { passive: true });
+    document.addEventListener("focusin", onFocusIn);
+    document.addEventListener("focusout", onFocusOut);
     document.documentElement.addEventListener("pointerleave", release);
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("scroll", onViewportChange);
       window.removeEventListener("resize", onViewportChange);
+      document.removeEventListener("focusin", onFocusIn);
+      document.removeEventListener("focusout", onFocusOut);
       document.documentElement.removeEventListener("pointerleave", release);
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
     };
   }, [reducedMotion]);
 
   if (reducedMotion) return null;
-  return <>
-    <div ref={cursorRef} className="custom-cursor" aria-hidden="true"><span /></div>
-    <div ref={ghostRef} className="custom-cursor-ghost" aria-hidden="true" />
-  </>;
+  return createPortal(
+    <>
+      <div ref={cursorRef} className="custom-cursor" aria-hidden="true"><span /></div>
+      <div ref={ghostRef} className="custom-cursor-ghost" aria-hidden="true" />
+    </>,
+    document.body,
+  );
 }

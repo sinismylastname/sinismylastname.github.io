@@ -4,11 +4,18 @@ import sinnerpadImage from "../../../images/sinnerpad.png";
 import shibaImage from "../../../images/lockednloaded.png";
 import robotImage from "../../../images/robot.jpg";
 
+export type ProjectNotes = {
+  eyebrow: string;
+  title: string;
+  paragraphs: string[];
+};
+
 export type Project = {
   id: string;
   name: string;
   summary: string;
   details: string;
+  notes?: ProjectNotes;
   image: string;
   imageAlt: string;
   technologies: string[];
@@ -31,15 +38,23 @@ export const projects: Project[] = [
     category: "software",
     links: {},
     featured: true,
+    notes: {
+      eyebrow: "September 2026 · First launch",
+      title: "Building my first personal website",
+      paragraphs: [
+        "The Hack4Impact Starter Pack gave me a practical introduction to Git, semantic HTML, CSS, and publishing with GitHub Pages. The biggest lesson was that a website is easier to improve when its structure and styling have separate jobs.",
+        "I also practiced making small commits, writing accessible image text, and building navigation that stays consistent across several pages. There is a lot more I want to add, but getting a complete first version online is a good place to begin.",
+      ],
+    },
   },
   {
     id: "sinnerpad",
     name: "SinnerPad",
     summary: "A four-key digital-art macropad designed and built in one day.",
-    details: "I made the PCB in KiCad, designed a two-piece enclosure in Onshape, then soldered and tested every part. The RP2040 runs KMK firmware and drives SK6812MINI-E lighting.",
+    details: "Designed and built a four-key digital-art macropad as a self-imposed one-day first hardware build. I designed the custom PCB in KiCad around a Seeed XIAO RP2040, Cherry MX-compatible switches, and four SK6812MINI-E RGB LEDs; modeled a two-piece 3D-printed enclosure in Onshape; soldered and assembled every component; and configured KMK firmware for undo, redo, copy, and paste shortcuts. I verified each key input and the RGB lighting after assembly.",
     image: sinnerpadImage,
     imageAlt: "Preview of the SinnerPad macropad",
-    technologies: ["KiCad", "RP2040", "KMK", "SK6812MINI-E", "Onshape"],
+    technologies: ["KiCad", "Seeed XIAO RP2040", "KMK", "Cherry MX switches", "SK6812MINI-E", "Onshape", "3D printing"],
     category: "hardware",
     links: {},
     featured: true,
@@ -48,10 +63,10 @@ export const projects: Project[] = [
     id: "shiba-arcade",
     name: "Shiba Arcade Game & Custom Cabinet",
     summary: "A Godot wave shooter with a Raspberry Pi arcade cabinet.",
-    details: "I built the game with randomized gameplay, upgrades, original art/audio, and a fixed turret. I also built, painted, wired, and soldered the cabinet for public play. It placed in the top 30 of 8,000+ Hack Club Shiba challenge participants.",
+    details: "Placed among the top 30 of more than 8,000 participants in Hack Club’s international Shiba challenge, earning an all-expenses-paid trip to Japan. I developed a Godot/GDScript fixed-turret wave shooter with procedurally randomized gameplay, upgrades, and original art and audio. I also built, painted, wired, and soldered a Raspberry Pi 4 8 GB arcade cabinet with joystick and button controls for public play.",
     image: shibaImage,
     imageAlt: "Preview of the Game Title Screen for the Shiba Arcade Game",
-    technologies: ["Godot", "GDScript", "Raspberry Pi 4", "Electronics"],
+    technologies: ["Godot", "GDScript", "Raspberry Pi 4 8 GB", "Procedural gameplay", "Original art/audio", "Electronics"],
     category: "software",
     links: {},
     featured: true,
@@ -59,11 +74,11 @@ export const projects: Project[] = [
   {
     id: "frc-robot",
     name: "FRC Team 3598 Robot Software",
-    summary: "Robot software for swerve drive, vision fusion, and autonomous planning.",
-    details: "As lead programmer, I helped migrate the SEStematic Eliminators from LabVIEW to command-based Java. The system included AprilTag vision fusion, autonomous path planning, and auto-aiming.",
+    summary: "FRC robot software for swerve drive, vision-fused pose estimation, auto-aim, and autonomous path planning.",
+    details: "As lead programmer and competition strategist, I led Team 3598’s first migration from LabVIEW to WPILib command-based Java. I programmed the swerve drivetrain, turret/shooter, intake, indexer, climber, autonomous routines, and NetworkTables while coordinating with mechanical and electrical subteams. I developed teleop and autonomous turret auto-aim with dynamic shot calculations based on robot velocity and target distance, and fused drivetrain odometry with Limelight AprilTag data through SwerveDrivePoseEstimator while scaling vision measurement standard deviations by distance. I created and adapted autonomous paths with Phoenix Tuner X, PathPlanner, and Choreo, served as lead strategist at the team’s first event, and was alliance captain during the Half Moon Bay playoffs.",
     image: robotImage,
     imageAlt: "Preview of the FRC robot",
-    technologies: ["Java", "WPILib", "Limelight", "AprilTags", "PathPlanner"],
+    technologies: ["Java", "WPILib Command-Based", "NetworkTables", "Limelight", "AprilTags", "SwerveDrivePoseEstimator", "Phoenix Tuner X", "PathPlanner", "Choreo"],
     category: "robotics",
     links: {},
     featured: false,

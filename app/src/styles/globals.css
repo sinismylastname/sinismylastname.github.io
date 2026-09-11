@@ -8,9 +8,14 @@ html::-webkit-scrollbar-thumb { min-height: 3rem; background: linear-gradient(18
 html::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, rgba(239,253,255,.98), rgba(102,209,242,.94) 42%, rgba(0,105,171,.98)); background-clip: padding-box; }
 html::-webkit-scrollbar-corner { background: rgba(102,203,238,.2); }
 
-body { min-width: 0; min-height: 100vh; margin: 0; color: var(--ink); background: linear-gradient(180deg, #8ee1ff 0%, #d8f8ff 38%, #efffe7 73%, #b8ed72 100%); background-size: 135% 135%; background-position: 0% 0%; animation: sky-flow 34s ease-in-out infinite alternate; font-family: var(--font-body); font-size: 16px; line-height: 1.65; overflow-x: clip; overflow-wrap: anywhere; }
+@media (hover: hover) and (pointer: fine) {
+  html { scrollbar-width: none; }
+  html::-webkit-scrollbar { display: none; width: 0; height: 0; }
+}
 
-body::before { content: ""; position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 14% 9%, rgba(255,255,255,.9) 0 3.5rem, transparent 17rem), radial-gradient(ellipse at 88% 19%, rgba(184,239,99,.62) 0 5rem, transparent 21rem), radial-gradient(ellipse at 76% 77%, rgba(119,217,255,.72) 0 12rem, transparent 28rem); background-size: 180% 180%; background-position: 0% 0%; animation: sky-light-shift 28s ease-in-out infinite alternate; }
+body { min-width: 0; min-height: 100vh; margin: 0; color: var(--ink); background: linear-gradient(180deg, #61d4ff 0%, #b9f0ff 38%, #e4ffcf 73%, #9fdb4e 100%); background-size: 135% 135%; background-position: 0% 0%; animation: sky-flow 34s ease-in-out infinite alternate; font-family: var(--font-body); font-size: 16px; line-height: 1.65; overflow-x: clip; overflow-wrap: anywhere; }
+
+body::before { content: ""; position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 14% 9%, rgba(255,255,255,.78) 0 3.5rem, transparent 17rem), radial-gradient(ellipse at 88% 19%, rgba(184,239,99,.78) 0 5rem, transparent 21rem), radial-gradient(ellipse at 76% 77%, rgba(70,204,245,.82) 0 12rem, transparent 28rem); background-size: 180% 180%; background-position: 0% 0%; animation: sky-light-shift 28s ease-in-out infinite alternate; }
 
 body::after { content: ""; position: fixed; width: 15rem; height: 15rem; right: -5rem; top: 35%; z-index: -2; border: 2px solid rgba(255,255,255,.42); border-radius: 50%; pointer-events: none; background: radial-gradient(circle at 32% 27%, rgba(255,255,255,.85), rgba(255,255,255,.16) 48%, transparent 70%); animation: ambient-drift var(--duration-ambient) ease-in-out infinite alternate; }
 
@@ -29,11 +34,27 @@ a:hover { color: #006d8b; }
 
 :where(a, button, input, textarea, [tabindex]):focus-visible { position: relative; z-index: 10; outline: 4px solid var(--focus-ring); outline-offset: 5px; }
 
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :where(a, button, input, textarea, [tabindex]):focus-visible { outline: none; outline-offset: 0; }
+}
+
 h1, h2, h3, p { overflow-wrap: anywhere; }
 h1, h2, h3 { margin-top: 0; color: var(--ink); font-family: var(--font-display); font-weight: 700; text-wrap: balance; }
 p { margin-top: 0; }
 
 .app-shell { position: relative; min-height: 100vh; isolation: isolate; }
+.scroll-progress-track { display: none; position: fixed; top: 1rem; right: 1rem; bottom: 1rem; z-index: 90; width: 2px; border: 0; border-radius: 999px; background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(38,137,181,.14) 48%, rgba(255,255,255,.22)); box-shadow: 0 0 5px rgba(0,93,139,.14), inset 0 0 1px rgba(255,255,255,.52); opacity: 1; cursor: none; touch-action: none; transition: opacity 260ms ease; }
+.scroll-progress-track.is-idle { opacity: 0; pointer-events: none; }
+.scroll-progress-thumb { position: absolute; top: 0; left: 50%; display: block; width: 1.15rem; min-height: 4.5rem; overflow: hidden; border: 1px solid rgba(255,255,255,.64); border-radius: 999px; background: radial-gradient(ellipse at 28% 12%, rgba(255,255,255,.46), transparent 27%), radial-gradient(ellipse at 72% 82%, rgba(22,126,181,.2), transparent 58%), linear-gradient(108deg, rgba(120,224,255,.12), rgba(255,255,255,.24) 45%, rgba(44,165,214,.1) 72%, rgba(0,88,151,.16)); box-shadow: inset 2px 0 3px rgba(255,255,255,.48), inset -2px 0 4px rgba(0,83,145,.16), inset 0 1px 2px rgba(255,255,255,.76), 0 4px 12px rgba(0,93,139,.2), 0 0 0 1px rgba(0,117,168,.14); backdrop-filter: blur(20px) saturate(180%) contrast(1.08); -webkit-backdrop-filter: blur(20px) saturate(180%) contrast(1.08); transform: translateX(-50%); cursor: none; touch-action: none; transition: top 90ms ease-out, box-shadow 180ms ease, background-color 180ms ease; }
+.scroll-progress-thumb::before { content: ""; position: absolute; inset: 2px 3px; border: 1px solid rgba(255,255,255,.36); border-radius: inherit; background: linear-gradient(110deg, rgba(255,255,255,.16), transparent 30%, rgba(0,129,198,.08) 72%, rgba(255,255,255,.18)); box-shadow: inset 1px 0 rgba(255,255,255,.3), inset -1px 0 rgba(14,105,176,.14); pointer-events: none; }
+.scroll-progress-thumb::after { content: ""; position: absolute; top: 7%; left: 19%; width: 31%; height: 30%; border-radius: 50%; background: rgba(255,255,255,.52); filter: blur(3px); opacity: .68; transform: rotate(-18deg); pointer-events: none; }
+.scroll-progress-track:hover .scroll-progress-thumb, .scroll-progress-track:focus-visible .scroll-progress-thumb { box-shadow: inset 2px 0 3px rgba(255,255,255,.64), inset -2px 0 4px rgba(0,83,145,.2), inset 0 1px 2px rgba(255,255,255,.84), 0 5px 16px rgba(0,93,139,.3), 0 0 0 2px rgba(111,216,247,.24); }
+.scroll-progress-track.is-dragging .scroll-progress-thumb { transition: none; background: radial-gradient(ellipse at 28% 12%, rgba(255,255,255,.58), transparent 27%), linear-gradient(108deg, rgba(120,224,255,.18), rgba(255,255,255,.32) 45%, rgba(44,165,214,.16) 72%, rgba(0,88,151,.22)); }
+.scroll-progress-track:focus-visible { outline: 3px solid rgba(111,216,247,.72); outline-offset: 6px; }
+
+@media (hover: hover) and (pointer: fine) {
+  .scroll-progress-track { display: block; }
+}
 .app-main { position: relative; z-index: 1; width: min(var(--content-width), calc(100% - 2rem)); min-width: 0; margin: 0 auto; padding: clamp(4rem, 8vw, 7rem) 0 5rem; }
 .page-transition { animation: page-enter 520ms var(--ease-spring) both; }
 @keyframes page-enter { from { opacity: 0; transform: translateY(12px) scale(.992); filter: blur(3px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }

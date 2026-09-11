@@ -305,3 +305,107 @@ GitHub Pages must use **GitHub Actions** as the publishing source.
 - Add real project source/demo/write-up URLs only when Andy supplies or confirms them.
 - Consider adding screenshot-based visual regression only if browser tooling becomes available.
 - Keep the current app architecture simple until more portfolio content justifies additional routing or a CMS.
+
+## Continuity protocol for future agents
+
+Before making changes, read this handoff and inspect the current implementation rather than relying on older assumptions. After every meaningful task, update this file with:
+
+- What changed, including the exact files and user-visible behavior.
+- The user’s current visual and interaction preferences.
+- Issues fixed, including the previous behavior and the new behavior.
+- Known limitations, unresolved visual concerns, and safe follow-up ideas.
+- Validation commands run and whether they passed.
+
+Preserve the React/Vite architecture, hash navigation, fine-pointer/reduced-motion cursor gates, keyboard accessibility, opaque fallbacks, and non-interactive decorative background layers. Do not reintroduce the deleted root HTML/CSS site or create commits/pushes unless explicitly requested. When changing motion, verify reduced-motion behavior and run the full validation suite before handing off.
+
+## Current state update — September 2026
+
+### Changes in this session
+
+- Home now renders all four projects instead of filtering to the three `featured` projects.
+- The standalone Notes link/page was removed from primary navigation. The existing reflection is now attached to the hack4impact StarterPack project as `Read build notes ↗`.
+- Project notes use a portal-based glass dialog with a blurred backdrop, Escape support, an X close button, outside-click dismissal, focus restoration, body-scroll locking, and smooth open/close transitions.
+- Page navigation now scrolls to the top over a slower 900ms eased animation rather than relying on the browser’s default smooth-scroll timing.
+- Added a fixed translucent blue-glass scroll-progress line at the right edge. The native `html` scrollbar remains available and is styled as a slimmer transparent blue-glass track and thumb.
+
+### Preferences reinforced
+
+Keep the portfolio playful and tactile, but avoid giant cursor morphs around cards or panels. Cursor morphing should remain useful for compact controls and links. Glass should be translucent with visible reflections, cool blue/aqua highlights, readable contrast, and graceful reduced-motion behavior. Notes should feel like contextual project knowledge, not a separate blog destination unless the user asks to restore that route.
+
+### Past interaction issues and current fixes
+
+- Large glass surfaces previously attracted the cursor into awkward oversized morphs; current targeting is limited to native compact controls.
+- Scroll could leave a morph visually behind its target; the cursor should synchronize directly to the target’s current viewport bounds during scroll/resize.
+- Pointer exit previously animated toward a hidden top-left origin; release now uses the last known pointer coordinates.
+- The Peek control was previously hard to understand/click while the card was morphed; it is now a compact glass control with its own morph target and parent-tilt isolation.
+- The previous Notes content was only reachable through a separate navigation page; it is now contextualized beside its related StarterPack project.
+
+### Validation status
+
+Run `npm run check`, `npm run build`, `npm test`, each `tests/validate_*.py` script, and `git diff --check` before final handoff. The current session’s implementation should be considered incomplete until those commands pass.
+
+### Final validation for this handoff
+
+The current implementation passed `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check` after the changes above. Files added or changed in this session include `app/src/components/ProjectNotesModal.tsx`, `app/src/components/ScrollProgress.tsx`, `app/src/components/AppShell.tsx`, `app/src/components/ProjectCard.tsx`, `app/src/data/projects.ts`, `app/src/data/site.ts`, `app/src/hooks/useHashPage.ts`, `app/src/pages/HomePage.tsx`, `app/src/app/App.tsx`, `app/src/styles/components.css`, `app/src/styles/globals.css`, and `handoff.md`.
+
+### Scrollbar replacement update — September 2026
+
+The scrollbar now follows Andy’s supplied diagram: on hover-capable fine-pointer desktop environments, the native scrollbar is hidden and `ScrollProgress.tsx` renders a thin fixed vertical line inset from the right edge with a centered translucent glass oval thumb. The thumb represents viewport position and document length, supports pointer dragging, track click-to-jump, and keyboard Home/End, arrow, and PageUp/PageDown controls through `role="scrollbar"` and ARIA values. Mobile/coarse-pointer environments keep the native scrollbar and hide the custom replacement. The line/thumb is the only pointer-interactive decorative affordance; other background decoration remains pointer-transparent.
+
+This scrollbar-specific behavior supersedes the earlier “decorative progress line plus visible native scrollbar” description above. Preserve the diagram’s simple centered-line/oval composition when tuning the visual treatment.
+
+Validation for this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Transparent LiquidGlass-style scrollbar update — September 2026
+
+The custom desktop scrollbar material was refined in `app/src/styles/globals.css` after the previous scrollbar edit was reverted. The track is now a lighter, lower-alpha glass line, and the draggable oval uses substantially more transparent layered gradients so the page background remains visible through it. Backdrop blur, saturation, translucent inner rim lighting, cool chromatic edge tinting, and a soft specular highlight provide the LiquidGlass-inspired depth without turning the thumb into an opaque blue pill.
+
+The existing `ScrollProgress.tsx` DOM, centered line/oval geometry, pointer dragging, track click-to-jump, keyboard controls, ARIA semantics, reduced-motion behavior, and native mobile/coarse-pointer fallback remain unchanged. The [LiquidGlass reference](https://liquid-glass.ybouane.com/) uses a WebGL DOM-capture and shader pipeline for true refraction; this implementation intentionally remains a dependency-free CSS approximation because a continuously captured WebGL context would be disproportionate for this small scrollbar control. Reconsider the full library only if actual background distortion is required and its runtime/performance cost is accepted.
+
+Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Scrollbar idle state and Frutiger Aero saturation update — September 2026
+
+`ScrollProgress.tsx` now keeps the custom fine-pointer desktop scrollbar visible while the page is actively scrolling or the control is being used, then adds the `is-idle` class after 1.6 seconds without activity. `globals.css` fades the track and thumb out with opacity and disables pointer interception while idle; scroll, focus, pointer entry, and pointer use restore it. Keyboard focus remains protected from hiding, and the native mobile/coarse-pointer fallback is unchanged.
+
+Mouse track jumps and thumb dragging now use an explicit immediate-scroll helper that temporarily overrides the page’s global smooth-scroll setting. This removes the short-distance jitter caused by smooth scrolling repeatedly chasing pointer movement. Keyboard scrollbar controls retain smooth scrolling when motion is allowed, while reduced-motion users still get immediate movement.
+
+The background palette in `globals.css` is more saturated: the sky uses a stronger cyan-to-aqua gradient, the lower field uses a more vivid green, and the fixed aqua/lime ambient highlights have increased color presence while preserving readable foreground contrast and the existing reduced-motion rules.
+
+Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Notes modal cursor layering update — September 2026
+
+The custom cursor was being composited beneath the notes modal’s blurred backdrop because `.notes-modal-backdrop` uses `z-index: 200`, while the cursor layers previously used `z-index: 100` and `101`. `app/src/styles/components.css` now places `.custom-cursor` at `z-index: 300` and `.custom-cursor-ghost` at `z-index: 301`, keeping both visible above the modal blur. They remain `pointer-events: none`, so the modal close button, outside-click dismissal, Escape handling, and focus behavior are unchanged.
+
+Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Corrected notes-modal cursor layering — September 2026
+
+The earlier z-index-only fix was insufficient because `.app-shell` uses `isolation: isolate`, trapping the cursor inside the app-shell stacking context. The notes modal is rendered through a portal directly under `document.body`, so its backdrop could still composite above and blur the cursor even when the cursor had a larger local z-index.
+
+`app/src/components/CustomCursor.tsx` now uses `createPortal` to render `.custom-cursor` and `.custom-cursor-ghost` directly into `document.body`. Their existing z-index values of 300 and 301 now participate in the same top-level stacking context as the notes modal backdrop at 200, so the cursor remains sharp and visible when `Read build notes` opens. Both layers remain `pointer-events: none`; the close X remains a normal interactive button, and outside-click, Escape, focus restoration, and modal transitions are unchanged.
+
+Validation after this correction passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Keyboard focus and cursor morph update — September 2026
+
+The unwanted lime/green focus visuals were coming from the global `:focus-visible` outline, the interactive glass surface `:focus-within` outline, and the lime contact-field focus halo. On fine-pointer, non-reduced-motion devices, the green focus outline is now suppressed and the custom cursor listens for `focusin`/`focusout`, morphing onto the focused link, button, input, textarea, or select. Keyboard tab order and control reachability remain unchanged; the cursor provides the visual focus affordance rather than removing focusability. Coarse-pointer and reduced-motion modes retain the fallback focus-visible treatment, and contact fields use an aqua focus halo instead of lime.
+
+Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Resume-backed project and resume detail update — September 2026
+
+Expanded portfolio and resume content using the readable text extracted from `resume.pdf` as the source of truth.
+
+Changes:
+
+- `app/src/data/projects.ts`: expanded SinnerPad with the Seeed XIAO RP2040, Cherry MX-compatible switches, four SK6812MINI-E RGB LEDs, KiCad PCB, Onshape two-piece enclosure, KMK shortcuts, one-day build context, and verification details.
+- `app/src/data/projects.ts`: expanded Shiba Arcade with its top-30 placement among 8,000+ participants, all-expenses-paid Japan trip, Godot/GDScript fixed-turret wave shooter, procedural gameplay, original art/audio, and Raspberry Pi 4 8 GB arcade cabinet details.
+- `app/src/data/projects.ts`: expanded FRC Team 3598 Robot Software with the LabVIEW-to-WPILib command-based Java migration, drivetrain and mechanism scope, NetworkTables, SwerveDrivePoseEstimator, Limelight AprilTag fusion, distance-scaled vision uncertainty, Phoenix Tuner X, PathPlanner, Choreo, and strategist/alliance-captain experience.
+- `app/src/pages/ResumePage.tsx`: expanded the professional summary, dated FRC roles, outreach metrics, technical skills, project descriptions, and dated honors exactly from the resume.
+- `app/src/styles/components.css`: increased the expanded project-details maximum height from 20rem to 40rem so the added project detail is not clipped.
+
+No unsupported project claims were added. The StarterPack project remains based on existing portfolio content because it is not described in the supplied resume PDF.
+
+Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
