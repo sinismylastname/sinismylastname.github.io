@@ -9,6 +9,16 @@
 .nav-link { display: block; padding: .48rem .68rem; color: var(--muted); border-radius: 999px; font-size: .86rem; font-weight: 900; line-height: 1.25; text-decoration: none; white-space: nowrap; }
 .nav-link:hover, .nav-link.is-current { color: var(--ink); }
 .nav-link:hover { background: rgba(255,255,255,.2); }
+.nav-menu-toggle { display: none; align-items: center; justify-content: center; gap: .5rem; min-height: 2.7rem; padding: .55rem .75rem; color: var(--ink); background: rgba(255,255,255,.42); border: 1px solid rgba(255,255,255,.8); border-radius: 999px; box-shadow: inset 0 1px rgba(255,255,255,.9), 0 4px 10px rgba(10,93,139,.12); font-size: .8rem; font-weight: 900; line-height: 1; white-space: nowrap; }
+.nav-menu-toggle:hover, .nav-menu-toggle:focus-visible { background: rgba(255,255,255,.72); border-color: rgba(255,255,255,.98); }
+.nav-menu-toggle-icon { position: relative; display: block; width: 1rem; height: 1rem; flex: 0 0 1rem; }
+.nav-menu-toggle-icon span { position: absolute; top: 50%; left: 0; display: block; width: 100%; height: 2px; border-radius: 999px; background: currentColor; transform-origin: center; transition: transform 180ms var(--ease-spring), opacity 180ms ease; }
+.nav-menu-toggle-icon span:first-child { transform: translateY(-.2rem); }
+.nav-menu-toggle-icon span:nth-child(2) { transform: translateY(0); }
+.nav-menu-toggle-icon span:last-child { transform: translateY(.2rem); }
+.nav-menu-toggle[data-open="true"] .nav-menu-toggle-icon span:first-child { transform: translateY(0) rotate(45deg); }
+.nav-menu-toggle[data-open="true"] .nav-menu-toggle-icon span:nth-child(2) { opacity: 0; transform: translateY(0) scaleX(.6); }
+.nav-menu-toggle[data-open="true"] .nav-menu-toggle-icon span:last-child { transform: translateY(0) rotate(-45deg); }
 
 .glass-surface { --pointer-x: 50%; --pointer-y: 50%; --tilt-x: 0deg; --tilt-y: 0deg; position: relative; isolation: isolate; overflow: hidden; color: var(--ink); background: var(--glass-fallback); border: 1px solid rgba(255,255,255,.78); border-radius: var(--radius-panel); box-shadow: var(--shadow-glass); transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)); transform-style: preserve-3d; transition: transform 520ms var(--ease-spring), box-shadow 260ms ease, border-color 260ms ease; }
 .glass-surface::before { content: ""; position: absolute; inset: 1px; z-index: -1; border: 1px solid rgba(255,255,255,.5); border-radius: inherit; background: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255,255,255,.48), transparent 24%), linear-gradient(145deg, rgba(255,255,255,.58), rgba(255,255,255,.08) 43%, rgba(31,116,148,.13) 100%); pointer-events: none; }
@@ -142,12 +152,11 @@
 .contact-form .glass-button { align-self: start; border: 0; }
 
 @media (max-width: 760px) {
-  .site-header { top: .5rem; }
-  .site-header { width: min(var(--content-width), calc(100% - 1rem)); }
-  .site-nav { align-items: flex-start; flex-direction: column; border-radius: 1.6rem; }
-  .nav-links-shell { width: 100%; }
-  .nav-links { width: 100%; justify-content: flex-start; }
-  .nav-link { white-space: normal; }
+  .site-header { top: .5rem; width: min(var(--content-width), calc(100% - 1rem)); }
+  .site-nav { gap: .7rem; padding: .55rem .6rem; }
+  .nav-links-shell { flex: 1 1 auto; }
+  .nav-links { gap: .1rem; flex-wrap: nowrap; }
+  .nav-link { padding: .4rem .45rem; font-size: .76rem; }
   .hero-layout, .about-grid, .contact-layout, .interest-panel { grid-template-columns: 1fr; }
   .hero-layout { gap: 2.5rem; }
   .profile-card { max-width: 28rem; margin: 0 auto; }
@@ -155,6 +164,56 @@
   .section-intro-row { align-items: start; flex-direction: column; }
   .interest-list { justify-content: flex-start; }
   .resume-list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 639px) {
+  .site-nav { align-items: center; flex-direction: row; border-radius: 1.35rem; overflow: visible; }
+  .brand-mark { width: 2.55rem; height: 2.55rem; }
+  .nav-menu-toggle { display: inline-flex; margin-left: auto; }
+  .mobile-menu-backdrop { position: fixed; top: 0; left: 0; right: 0; z-index: 0; height: min(24rem, 70vh); background: linear-gradient(180deg, rgba(37,163,203,.2), rgba(236,255,255,.08)); backdrop-filter: blur(8px) saturate(115%); -webkit-backdrop-filter: blur(8px) saturate(115%); mask-image: linear-gradient(180deg, #000 0 78%, transparent 100%); -webkit-mask-image: linear-gradient(180deg, #000 0 78%, transparent 100%); opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 180ms ease, visibility 180ms ease; }
+  .mobile-menu-backdrop.is-visible { opacity: 1; visibility: visible; }
+  .site-nav { position: relative; z-index: 1; }
+  .nav-links-shell { position: absolute; top: calc(100% + .55rem); left: 0; right: 0; z-index: 4; display: none; width: auto; flex-direction: column; padding: .35rem; border: 1px solid rgba(255,255,255,.92); border-radius: 1.35rem; background: rgba(246,253,255,.9); box-shadow: inset 0 1px rgba(255,255,255,.98), 0 18px 42px rgba(5,75,111,.3), 0 4px 12px rgba(255,255,255,.34); backdrop-filter: blur(30px) saturate(145%); -webkit-backdrop-filter: blur(30px) saturate(145%); overflow: hidden; }
+  .nav-links-shell.is-open { display: flex; }
+  .nav-links { width: 100%; flex-direction: column; flex-wrap: nowrap; gap: .15rem; justify-content: stretch; }
+  .nav-links .nav-link { display: flex; width: 100%; min-height: 2.75rem; align-items: center; box-sizing: border-box; padding: .65rem .8rem; color: #123459; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.24); font-size: .9rem; letter-spacing: .01em; text-shadow: 0 1px 0 rgba(255,255,255,.98), 0 0 .45rem rgba(255,255,255,.72); }
+  .nav-links .nav-link:hover, .nav-links .nav-link.is-current, .nav-links .nav-link:focus-visible { color: #0b3157; background: rgba(255,255,255,.68); border-color: rgba(255,255,255,.9); box-shadow: inset 0 1px rgba(255,255,255,.98), 0 3px 9px rgba(6,91,130,.12); }
+  .nav-active-indicator { display: none; }
+  .hero-layout { gap: 1.75rem; margin-bottom: 4rem; }
+  .hero-copy h1 { margin-bottom: 1rem; font-size: clamp(3.35rem, 15vw, 5.4rem); line-height: .82; }
+  .hero-lede { margin-bottom: 1.4rem; font-size: clamp(.9375rem, 3.8vw, 1.05rem); line-height: 1.5; }
+  .hero-actions, .page-actions { gap: .75rem; }
+  .glass-button { min-width: 0; min-height: 3rem; padding: .7rem 1rem; font-size: .95rem; }
+  .section-intro-row { gap: .65rem; margin-bottom: 1rem; }
+  .section-intro-row h2 { font-size: clamp(1.75rem, 7vw, 2.5rem); }
+  .project-grid, .full-project-grid { gap: .9rem; }
+  .project-card { padding: .55rem; }
+  .project-content { padding: .9rem .35rem .35rem; }
+  .project-heading-row h2 { font-size: clamp(1.2rem, 6vw, 1.55rem); }
+  .project-summary { min-height: 0; margin-bottom: .75rem; }
+  .tech-list, .interest-list { gap: .3rem; }
+  .tech-list span, .interest-list span { padding: .25rem .48rem; font-size: .68rem; }
+  .project-actions { gap: .55rem; margin-top: .8rem; }
+  .project-actions .glass-button { min-height: 2.65rem; padding: .55rem .7rem; font-size: .75rem; }
+  .filter-row { gap: .3rem; margin: -.7rem 0 1rem; }
+  .filter-button { min-height: 2.65rem; padding: .42rem .68rem; font-size: .75rem; }
+  .reading-panel, .interest-card, .blog-post, .resume-sheet, .contact-layout { padding: 1.15rem; }
+  .interest-panel { gap: 1.2rem; padding: 1.15rem; }
+  .interest-panel h2, .interest-card h2 { font-size: clamp(1.6rem, 7vw, 2.25rem); }
+  .blog-post h2 { font-size: clamp(1.8rem, 8vw, 2.7rem); }
+  .page-actions { margin: -.65rem 0 1.5rem; }
+  .resume-section { padding: 1.25rem 0; }
+  .resume-section h3 { font-size: 1.08rem; }
+  .entry-info, .form-note { font-size: .86rem; }
+  .resume-list { gap: .35rem 1rem; padding-left: 1rem; }
+  .contact-layout { gap: 1.5rem; }
+  .contact-copy h2 { font-size: clamp(1.75rem, 7vw, 2.5rem); }
+  .contact-form label { font-size: .95rem; }
+  .contact-form input, .contact-form textarea { min-height: 2.85rem; padding: .7rem .75rem; font-size: .95rem; }
+  .contact-form textarea { min-height: 8rem; }
+  .notes-modal { padding: 1.25rem; border-radius: 1.5rem; }
+  .notes-modal h2 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+  .notes-modal p:not(.eyebrow) { font-size: .95rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

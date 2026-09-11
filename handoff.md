@@ -430,3 +430,55 @@ Behavior:
 - Keyboard focus and activation remain available through the real button; the cursor toggle itself retains a visible aqua focus indicator.
 
 Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Mobile navigation and typography refinement — September 2026
+
+The phone layout was refined after the navigation links wrapped inside the glass capsule and the hero typography consumed too much mobile space. The screenshot’s `Contact` second-row wrap is addressed without changing the desktop navigation design.
+
+Changes:
+
+- `app/src/components/Navigation.tsx`: added React `isMenuOpen` state, a real Menu/Close button, `aria-expanded`, `aria-controls="primary-navigation-links"`, an accessible changing label, and a stable dropdown ID. Selecting a navigation link intentionally leaves the mobile menu open; pressing the same button toggles it closed.
+- `app/src/styles/components.css`: preserved inline navigation at 640px and above, added tighter tablet navigation sizing through 760px, and added a below-640px compact horizontal glass header with a vertical glass dropdown. Mobile links are no-wrap, full-width, and have touch-friendly minimum heights. The desktop active indicator is hidden in the mobile dropdown, where the active link styling remains visible.
+- `app/src/styles/components.css`: added targeted mobile density rules for hero text, section headings, leads, actions, buttons, filters, project cards, technology tags, resume sections, contact fields, interests, and the notes modal. The mobile glass treatment and existing desktop hierarchy remain intact.
+- `app/src/styles/globals.css`: added a below-640px body baseline using `clamp(.9375rem, 3.8vw, 1rem)`, reduced mobile section-heading scale, tightened main/footer widths and spacing, and retained the existing 320px minimum HTML width and overflow protection.
+
+Responsive behavior:
+
+- At 640px and wider, the existing inline glass navigation remains available.
+- Below 640px, the AS brand mark and menu button remain in one compact row; the five page links appear in a vertical glass dropdown only when the button is opened.
+- The dropdown remains open after page selection and closes only through the menu button, as requested.
+- Body copy bottoms out around 15px on the smallest screens and returns toward 16px at wider phone widths. Headings and controls scale independently so labels stay readable and touch targets remain usable.
+- Existing coarse-pointer, reduced-motion, keyboard-focus, hash-navigation, active-page, modal, and custom-cursor behavior remains unchanged.
+
+Validation after this update passed:
+
+- `npm run check`
+- `npm run build`
+- `npm test`
+- Every `tests/validate_*.py` script
+- `git diff --check`
+
+The source was reviewed against the requested 375px, 390px, 430px, 639px, 640px, and 320px boundary cases. No browser automation or device emulator is available in this environment, so final visual confirmation should still be performed on a real phone or responsive browser preview.
+
+### Mobile menu contrast and blur refinement — September 2026
+
+The open mobile menu was still too transparent over hero copy and decorative artwork. The menu now uses a heavier glass treatment and a controlled blur layer so the navigation labels remain visually dominant and easy to distinguish.
+
+Changes:
+
+- `app/src/components/Navigation.tsx`: added an `aria-hidden` `.mobile-menu-backdrop` sibling controlled by the existing `isMenuOpen` state. It is non-interactive and appears only while the mobile menu is open.
+- `app/src/styles/components.css`: added a subtle fixed blur layer beneath the mobile navigation, with a masked lower edge so the content immediately behind the menu is softened without blocking the page.
+- `app/src/styles/components.css`: increased the mobile dropdown fill to approximately 90% opacity, increased its backdrop blur to 30px, and strengthened its border, inner highlight, and cast shadow.
+- `app/src/styles/components.css`: mobile navigation labels now use dark navy text, a white highlight/text shadow, translucent individual link surfaces, and stronger hover/current/focus separation.
+
+The existing below-640px menu behavior is unchanged: the menu stays open after link selection and closes only through the Menu/Close button. Desktop navigation, keyboard semantics, reduced-motion behavior, coarse-pointer fallback, custom cursor layering, and hash navigation remain unchanged.
+
+Validation after this update passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+### Mobile menu icon alignment correction — September 2026
+
+The mobile Menu/Close icon bars were uneven when transforming from the hamburger into an `X`. The original implementation kept the bars in grid flow and applied different `translateY` offsets during rotation, so the diagonals crossed from different vertical centers.
+
+`app/src/styles/components.css` now uses a fixed `1rem × 1rem` relative icon box. Each bar is absolutely positioned at the same horizontal center, with equal length and height. The closed state uses symmetrical vertical offsets; the open state rotates the first and last bars from the shared center at `45deg` and `-45deg`, while the middle bar fades out. The menu behavior, button semantics, focus treatment, reduced-motion rules, and surrounding styling remain unchanged.
+
+Validation after this correction passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.

@@ -123,6 +123,15 @@ p { margin-top: 0; }
   .section-heading h1 { font-size: clamp(3.1rem, 16vw, 5rem); }
 }
 
+@media (max-width: 639px) {
+  body { font-size: clamp(.9375rem, 3.8vw, 1rem); line-height: 1.58; }
+  .app-main { width: min(var(--content-width), calc(100% - 1.25rem)); padding-top: 3rem; padding-bottom: 3.5rem; }
+  .app-footer { width: min(var(--content-width), calc(100% - 1.25rem)); font-size: .75rem; }
+  .section-heading { margin-bottom: 1.8rem; }
+  .section-heading h1 { margin-bottom: .75rem; font-size: clamp(2.8rem, 14vw, 4.3rem); }
+  .section-lede { font-size: clamp(.9375rem, 3.6vw, 1.05rem); line-height: 1.55; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }

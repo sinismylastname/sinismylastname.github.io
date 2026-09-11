@@ -7,6 +7,8 @@ export function Navigation({ activePage, onNavigate }: { activePage: PageId; onN
   const shellRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<Partial<Record<PageId, HTMLAnchorElement | null>>>({});
   const [indicator, setIndicator] = useState({ left: 0, top: 0, width: 0, height: 0 });
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuLabel = isMenuOpen ? "Close navigation menu" : "Open navigation menu";
 
   useLayoutEffect(() => {
     const measureIndicator = () => {
@@ -30,9 +32,22 @@ export function Navigation({ activePage, onNavigate }: { activePage: PageId; onN
 
   return (
     <header className="site-header">
+      <span className={`mobile-menu-backdrop ${isMenuOpen ? "is-visible" : ""}`} aria-hidden="true" />
       <GlassSurface as="nav" variant="nav" className="site-nav" aria-label="Primary navigation">
         <a className="brand-mark" href="#home" onClick={() => onNavigate("home")} aria-label="Andy Sin home">AS</a>
-        <div ref={shellRef} className="nav-links-shell">
+        <button
+          className="nav-menu-toggle"
+          type="button"
+          data-open={isMenuOpen ? "true" : "false"}
+          aria-expanded={isMenuOpen}
+          aria-controls="primary-navigation-links"
+          aria-label={menuLabel}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          <span className="nav-menu-toggle-icon" aria-hidden="true"><span /><span /><span /></span>
+          <span>{isMenuOpen ? "Close" : "Menu"}</span>
+        </button>
+        <div id="primary-navigation-links" ref={shellRef} className={`nav-links-shell ${isMenuOpen ? "is-open" : ""}`}>
           <span
             className="nav-active-indicator"
             aria-hidden="true"
