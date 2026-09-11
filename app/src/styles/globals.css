@@ -13,11 +13,19 @@ html::-webkit-scrollbar-corner { background: rgba(102,203,238,.2); }
   html::-webkit-scrollbar { display: none; width: 0; height: 0; }
 }
 
-body { min-width: 0; min-height: 100vh; margin: 0; color: var(--ink); background: linear-gradient(180deg, #61d4ff 0%, #b9f0ff 38%, #e4ffcf 73%, #9fdb4e 100%); background-size: 135% 135%; background-position: 0% 0%; animation: sky-flow 34s ease-in-out infinite alternate; font-family: var(--font-body); font-size: 16px; line-height: 1.65; overflow-x: clip; overflow-wrap: anywhere; }
+body { min-width: 0; min-height: 100vh; margin: 0; color: var(--ink); background: linear-gradient(180deg, #61d4ff 0%, #b9f0ff 38%, #e4ffcf 73%, #9fdb4e 100%); font-family: var(--font-body); font-size: 16px; line-height: 1.65; overflow-x: clip; overflow-wrap: anywhere; }
 
-body::before { content: ""; position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 14% 9%, rgba(255,255,255,.78) 0 3.5rem, transparent 17rem), radial-gradient(ellipse at 88% 19%, rgba(184,239,99,.78) 0 5rem, transparent 21rem), radial-gradient(ellipse at 76% 77%, rgba(70,204,245,.82) 0 12rem, transparent 28rem); background-size: 180% 180%; background-position: 0% 0%; animation: sky-light-shift 28s ease-in-out infinite alternate; }
+body::before { content: ""; position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 14% 9%, rgba(255,255,255,.78) 0 3.5rem, transparent 17rem), radial-gradient(ellipse at 88% 19%, rgba(184,239,99,.78) 0 5rem, transparent 21rem), radial-gradient(ellipse at 76% 77%, rgba(70,204,245,.82) 0 12rem, transparent 28rem); background-size: 180% 180%; transform-origin: center; animation: sky-light-shift 28s ease-in-out infinite alternate; }
 
 body::after { content: ""; position: fixed; width: 15rem; height: 15rem; right: -5rem; top: 35%; z-index: -2; border: 2px solid rgba(255,255,255,.42); border-radius: 50%; pointer-events: none; background: radial-gradient(circle at 32% 27%, rgba(255,255,255,.85), rgba(255,255,255,.16) 48%, transparent 70%); animation: ambient-drift var(--duration-ambient) ease-in-out infinite alternate; }
+
+html[data-page-hidden="true"] body,
+html[data-page-hidden="true"] body::before,
+html[data-page-hidden="true"] body::after,
+html[data-page-hidden="true"] .ambient-background,
+html[data-page-hidden="true"] .ambient-background * {
+  animation-play-state: paused !important;
+}
 
 img, svg { display: block; max-width: 100%; }
 button, input, textarea { max-width: 100%; font: inherit; }
@@ -109,8 +117,7 @@ p { margin-top: 0; }
 .text-button { padding: .35rem 0; color: var(--deep-aqua); background: transparent; border: 0; font-weight: 900; }
 .text-button:hover { color: var(--ink); }
 
-@keyframes sky-flow { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }
-@keyframes sky-light-shift { from { background-position: 0% 0%; transform: scale(1); } to { background-position: 100% 72%; transform: scale(1.08); } }
+@keyframes sky-light-shift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-1.5%, -1%, 0) scale(1.08); } }
 @keyframes cloud-drift { from { transform: translate3d(-1rem, 0, 0) rotate(-5deg); opacity: .45; } to { transform: translate3d(8rem, 0, 0) rotate(1deg); opacity: .75; } }
 @keyframes wave-sway { from { transform: translate3d(-2rem, -.7rem, 0) rotate(-8deg) scale(.96); } to { transform: translate3d(3rem, .8rem, 0) rotate(-2deg) scale(1.04); } }
 @keyframes ambient-drift { from { transform: translate3d(0,-.4rem,0) scale(.99); } to { transform: translate3d(-.75rem,.4rem,0) scale(1.01); } }
@@ -135,7 +142,7 @@ p { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
-  body { animation: none !important; background-position: 0% 0%; }
+  body { animation: none !important; }
   body::before, body::after, .ambient-orb, .ambient-cloud, .ambient-wave, .ambient-bubble { animation: none !important; }
   .page-transition { animation: none !important; }
 }

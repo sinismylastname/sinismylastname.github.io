@@ -37,11 +37,30 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
     if (!cursor) return;
 
     let lockedTarget: HTMLElement | null = null;
+    let lockedBounds: DOMRect | null = null;
+    let lockedRadius = 12;
     let hasPointer = false;
     let lastPointer = { x: 0, y: 0, time: performance.now() };
     let velocity = { x: 0, y: 0 };
     let current = hiddenState();
     let desired = hiddenState();
+    const clearTargetCache = () => {
+      lockedBounds = null;
+      lockedRadius = 12;
+    };
+    const refreshTargetCache = () => {
+      if (!lockedTarget) return false;
+      lockedBounds = lockedTarget.getBoundingClientRect();
+      const styles = getComputedStyle(lockedTarget);
+      lockedRadius = parseFloat(styles.borderRadius) || 12;
+      return true;
+    };
+    const setLockedTarget = (target: HTMLElement | null) => {
+      if (lockedTarget === target && (target === null || lockedBounds)) return;
+      lockedTarget = target;
+      clearTargetCache();
+      if (lockedTarget) refreshTargetCache();
+    };
 
     const render = () => {
       current = {
@@ -84,7 +103,7 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
       if (frameRef.current === null) frameRef.current = requestAnimationFrame(render);
     };
     const release = () => {
-      lockedTarget = null;
+      setLockedTarget(null);
       desired = hasPointer
         ? { x: lastPointer.x, y: lastPointer.y, width: 24, height: 24, radius: 50, rotate: 0, active: false, visible: false }
         : hiddenState();
@@ -92,14 +111,14 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
     };
     const updateDesired = (tugX: number, tugY: number, rotate: number, snap = false) => {
       if (lockedTarget) {
-        const bounds = lockedTarget.getBoundingClientRect();
-        const styles = getComputedStyle(lockedTarget);
+        const bounds = lockedBounds ?? (refreshTargetCache() ? lockedBounds : null);
+        if (!bounds) return;
         desired = {
           x: bounds.left + bounds.width / 2 + tugX,
           y: bounds.top + bounds.height / 2 + tugY,
           width: Math.max(32, bounds.width + 14),
           height: Math.max(32, bounds.height + 10),
-          radius: Math.min(24, Math.max(8, parseFloat(styles.borderRadius) || 12)),
+          radius: Math.min(24, Math.max(8, lockedRadius)),
           rotate,
           active: true,
           visible: true,
@@ -131,21 +150,24 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
       const hoveredTarget = ignoredTarget ? null : eventElement?.closest<HTMLElement>(INTERACTIVE_SELECTOR);
 
       if (ignoredTarget) {
-        lockedTarget = null;
+        setLockedTarget(null);
       } else if (hoveredTarget) {
-        lockedTarget = hoveredTarget;
+        setLockedTarget(hoveredTarget);
       } else if (lockedTarget) {
-        const bounds = lockedTarget.getBoundingClientRect();
+        const bounds = lockedBounds ?? (refreshTargetCache() ? lockedBounds : null);
+        if (!bounds) return;
         const outsideX = Math.max(bounds.left - event.clientX, 0, event.clientX - bounds.right);
         const outsideY = Math.max(bounds.top - event.clientY, 0, event.clientY - bounds.bottom);
-        if (Math.hypot(outsideX, outsideY) > RELEASE_DISTANCE) lockedTarget = null;
+        if (Math.hypot(outsideX, outsideY) > RELEASE_DISTANCE) release();
       }
 
       updateDesired(tugX, tugY, rotate);
     };
     const onViewportChange = () => {
       if (!hasPointer || !lockedTarget) return;
-      const bounds = lockedTarget.getBoundingClientRect();
+      refreshTargetCache();
+      const bounds = lockedBounds;
+      if (!bounds) return;
       const outsideX = Math.max(bounds.left - lastPointer.x, 0, lastPointer.x - bounds.right);
       const outsideY = Math.max(bounds.top - lastPointer.y, 0, lastPointer.y - bounds.bottom);
       if (Math.hypot(outsideX, outsideY) > RELEASE_DISTANCE) {
@@ -159,7 +181,7 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
         ? event.target.closest<HTMLElement>(INTERACTIVE_SELECTOR)
         : null;
       if (!focused || focused.matches(CURSOR_IGNORE_SELECTOR)) return;
-      lockedTarget = focused;
+      setLockedTarget(focused);
       updateDesired(0, 0, 0, true);
     };
     const onFocusOut = (event: FocusEvent) => {

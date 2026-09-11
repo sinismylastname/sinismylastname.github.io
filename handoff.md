@@ -482,3 +482,51 @@ The mobile Menu/Close icon bars were uneven when transforming from the hamburger
 `app/src/styles/components.css` now uses a fixed `1rem × 1rem` relative icon box. Each bar is absolutely positioned at the same horizontal center, with equal length and height. The closed state uses symmetrical vertical offsets; the open state rotates the first and last bars from the shared center at `45deg` and `-45deg`, while the middle bar fades out. The menu behavior, button semantics, focus treatment, reduced-motion rules, and surrounding styling remain unchanged.
 
 Validation after this correction passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+
+### Conservative whole-site performance pass — September 2026
+
+This performance pass was based on the supplied `Trace-20260911T091450.json.gz` and the current React/Vite source. The trace parsed as a Chromium trace with approximately 91,991 events and included rendering-related event families plus several events over 50ms. It did not reliably expose a trustworthy recording duration, pointer/mouse interaction coverage, or source-level attribution to `CustomCursor`, `usePointerTilt`, layout, paint, or compositing. The changes below are therefore conservative source-based optimizations rather than claims of a measured frame-rate improvement.
+
+Files changed:
+
+- `app/src/hooks/usePointerTilt.ts`
+  - Pointer events now store the latest coordinates and schedule one RAF.
+  - The RAF reads `getBoundingClientRect()` once, computes the same pointer percentages and tilt range, and writes the four CSS custom properties together.
+  - Ignored-target reset behavior, pointer-leave reset behavior, reduced-motion gating, fine-pointer gating, and cleanup are preserved.
+- `app/src/components/AmbientBackground.tsx`
+  - Added a `visibilitychange` listener that applies `data-page-hidden="true"` to the document root while the tab is backgrounded.
+  - The listener and attribute are cleaned up when the component unmounts.
+- `app/src/components/CustomCursor.tsx`
+  - Active target bounds and computed border radius are cached when a target is locked.
+  - The cache refreshes when the target changes and on viewport scroll/resize invalidation instead of reading geometry for every pointer event.
+  - Existing morphing, velocity tug, release distance, focus behavior, portal rendering, native-cursor mode, and settled RAF sleeping remain intact.
+- `app/src/styles/components.css`
+  - The glass base reflection is static rather than using pointer coordinates as radial-gradient geometry.
+  - The moving glass sheen is anchored and moved through `transform`, not `left`.
+  - The moving sheen no longer uses the 10px blur filter; its softness comes from translucent gradient stops.
+  - The cursor ghost now uses transform-driven `translate3d` positioning instead of `top`/`left` coordinates.
+- `app/src/styles/globals.css`
+  - The large body sky gradient is static instead of animating `background-position`.
+  - Sky-light drift remains visible through transform animation on the fixed pseudo-element.
+  - A hidden-document selector pauses body, pseudo-element, and ambient animations while the tab is backgrounded.
+  - Existing reduced-motion, responsive, print, fallback, and pointer-inert decoration behavior remains in place.
+
+Behavior preserved:
+
+- Full Frutiger Aero sky, clouds, waves, bubbles, orbs, glass surfaces, pointer tilt, custom cursor morphing, and native cursor fallback.
+- Fine-pointer and `prefers-reduced-motion` gates.
+- Keyboard focus behavior, portal layering, mobile behavior, print styles, and opaque glass fallbacks.
+- Ambient animation resumes when the document becomes visible again.
+
+Validation completed successfully after this pass:
+
+```text
+npm run check
+npm run build
+npm test
+for test in tests/validate_*.py; do python3 "$test" || exit 1; done
+git diff --check
+```
+
+No additional trace was available, so this handoff intentionally does not claim a numeric FPS, paint-time, or frame-time improvement. The next useful measurement would be a controlled before/after browser trace covering pointer movement, glass-card interaction, cursor morphing, scrolling, and stationary idle, but the implementation does not depend on obtaining another trace.

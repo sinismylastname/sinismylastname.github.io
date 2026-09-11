@@ -1,4 +1,23 @@
+import { useEffect } from "react";
+
 export function AmbientBackground() {
+  useEffect(() => {
+    const syncVisibility = () => {
+      if (document.visibilityState === "hidden") {
+        document.documentElement.dataset.pageHidden = "true";
+      } else {
+        delete document.documentElement.dataset.pageHidden;
+      }
+    };
+
+    syncVisibility();
+    document.addEventListener("visibilitychange", syncVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", syncVisibility);
+      delete document.documentElement.dataset.pageHidden;
+    };
+  }, []);
+
   return (
     <div className="ambient-background" aria-hidden="true">
       <span className="ambient-orb ambient-orb-one" />

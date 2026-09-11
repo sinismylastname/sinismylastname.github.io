@@ -14,8 +14,22 @@ export function usePointerTilt<T extends HTMLElement>(enabled = true) {
     if (!pointerMedia.matches) return;
 
     let nextValues = { x: 50, y: 50, tiltX: 0, tiltY: 0 };
+    let latestPointer = { x: 0, y: 0 };
+    let resetPending = false;
     const applyValues = () => {
       frameRef.current = null;
+      if (!resetPending) {
+        const bounds = element.getBoundingClientRect();
+        const x = Math.max(0, Math.min(1, (latestPointer.x - bounds.left) / Math.max(bounds.width, 1)));
+        const y = Math.max(0, Math.min(1, (latestPointer.y - bounds.top) / Math.max(bounds.height, 1)));
+        nextValues = {
+          x: x * 100,
+          y: y * 100,
+          tiltX: (0.5 - y) * 5,
+          tiltY: (x - 0.5) * 5,
+        };
+      }
+      resetPending = false;
       element.style.setProperty("--pointer-x", `${nextValues.x}%`);
       element.style.setProperty("--pointer-y", `${nextValues.y}%`);
       element.style.setProperty("--tilt-x", `${nextValues.tiltX}deg`);
@@ -27,23 +41,16 @@ export function usePointerTilt<T extends HTMLElement>(enabled = true) {
     };
 
     const onPointerMove = (event: PointerEvent) => {
+      latestPointer = { x: event.clientX, y: event.clientY };
       if (event.target instanceof Element && event.target.closest("[data-tilt-ignore]")) {
         reset();
         return;
       }
-      const bounds = element.getBoundingClientRect();
-      const x = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
-      const y = Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height));
-      nextValues = {
-        x: x * 100,
-        y: y * 100,
-        tiltX: (0.5 - y) * 5,
-        tiltY: (x - 0.5) * 5,
-      };
       schedule();
     };
 
     const reset = () => {
+      resetPending = true;
       nextValues = { x: 50, y: 50, tiltX: 0, tiltY: 0 };
       schedule();
     };
@@ -53,7 +60,10 @@ export function usePointerTilt<T extends HTMLElement>(enabled = true) {
     return () => {
       element.removeEventListener("pointermove", onPointerMove);
       element.removeEventListener("pointerleave", reset);
-      if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
+      if (frameRef.current !== null) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
     };
   }, [enabled, reducedMotion]);
 
