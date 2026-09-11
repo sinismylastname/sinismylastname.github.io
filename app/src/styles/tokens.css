@@ -1,24 +1,77 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 :root {
-  --ink: #123459;
-  --ink-soft: #244b6c;
-  --muted: #496b85;
-  --sky: #77d9ff;
-  --aqua: #27bfc5;
-  --deep-aqua: #007f9f;
-  --lime: #b8ef63;
-  --cloud: #f5fcff;
-  --glass-fallback: #f4fcff;
-  --glass-tint: rgba(244, 252, 255, 0.36);
-  --glass-strong: rgba(248, 254, 255, 0.49);
-  --glass-soft: rgba(248, 254, 255, 0.58);
-  --edge-light: rgba(255, 255, 255, 0.92);
-  --edge-shadow: rgba(41, 93, 121, 0.38);
+  --ink: #10345a;
+  --ink-soft: #1d4d70;
+  --muted: #3b6683;
+  --sky: #4fd4ff;
+  --aqua: #18c8cf;
+  --deep-aqua: #00749b;
+  --lime: #b9f34f;
+  --cloud: #f4fdff;
+
+  /* Saturated one-shot sky environment defaults */
+  --sky-top: #3dc8ff;
+  --sky-mid: #8fe8ff;
+  --sky-horizon: #d5ffae;
+  --sky-bottom: #78cf3f;
+  --environment-cloud-highlight: rgba(255,255,255,.86);
+  --environment-aqua-reflection: rgba(24,196,239,.9);
+  --environment-green-bounce: rgba(166,239,74,.2);
+  --environment-edge-tint: rgba(117,235,255,.28);
+
+  /* Material roles: heavy glass, soft acrylic, plastic, enamel, bubble, lens */
+  --material-heavy-bg: var(--glass-strong);
+  --material-heavy-rim: rgba(255,255,255,.96);
+  --material-heavy-shadow: var(--shadow-glass);
+  --material-acrylic-bg: var(--glass-soft);
+  --material-acrylic-rim: rgba(255,255,255,.86);
+  --material-acrylic-edge: rgba(216,239,207,.3);
+  --material-acrylic-shadow: 0 14px 28px rgba(54,78,61,.18), 0 4px 10px rgba(255,255,255,.28), inset 0 1px 1px rgba(255,255,255,.94), inset 0 -2px 5px rgba(62,91,66,.13);
+  --material-plastic-bg: rgba(251,255,246,.74);
+  --material-plastic-highlight: rgba(255,255,255,.88);
+  --material-plastic-shadow: rgba(59,88,59,.22);
+  --material-enamel-highlight: rgba(255,255,255,.92);
+  --material-enamel-rim: rgba(0,112,154,.34);
+  --material-lens-highlight: rgba(255,255,255,.94);
+  --material-lens-tint: rgba(75,218,255,.25);
+
+  /* Bubble material */
+  --bubble-rim: rgba(129,239,255,.7);
+  --bubble-highlight: rgba(255,255,255,.96);
+  --bubble-secondary-highlight: rgba(255,255,255,.56);
+  --bubble-environment-tint: rgba(75,211,248,.34);
+  --bubble-film: rgba(255,177,221,.16);
+  --glass-tint: rgba(249,253,241,.52);
+  --glass-strong: rgba(255,255,255, calc(.58 * var(--aero-glass-opacity, .72)));
+  --glass-soft: rgba(255,255,255, calc(.68 * var(--aero-acrylic-opacity, 1)));
+  --edge-light: rgba(255, 255, 255, 0.96);
+  --edge-shadow: rgba(64, 84, 62, 0.36);
   --focus-ring: #4b7600;
-  --shadow-glass: 0 24px 46px rgba(10, 93, 139, 0.2), 0 4px 10px rgba(255, 255, 255, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.95), inset 0 -2px 5px rgba(25, 96, 131, 0.18);
-  --shadow-glass-hover: 0 30px 56px rgba(10, 93, 139, 0.28), 0 7px 16px rgba(255, 255, 255, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.98), inset 0 -3px 8px rgba(25, 96, 131, 0.2);
-  --shadow-soft: 0 14px 28px rgba(10, 93, 139, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  --shadow-glass: 0 24px 46px rgba(54,78,61,.2), 0 4px 10px rgba(255,255,255,.46), inset 0 1px 1px rgba(255,255,255,.98), inset 0 -2px 5px rgba(62,91,66,.16);
+  --shadow-glass-hover: 0 30px 56px rgba(54,78,61,.27), 0 7px 16px rgba(255,255,255,.54), inset 0 1px 1px rgba(255,255,255,1), inset 0 -3px 8px rgba(62,91,66,.2);
+  --shadow-soft: 0 14px 28px rgba(54,78,61,.18), inset 0 1px 1px rgba(255,255,255,.94);
+
+  /* Fixed production Aero preset. */
+  --aero-glass-opacity: .72;
+  --aero-glass-reflection: 1.5;
+  --aero-glass-blur: .55;
+  --aero-upper-rim: 1.5;
+  --aero-green-bounce: 1;
+  --aero-sky-saturation: 1.2;
+  --aero-cloud-brightness: 1.4;
+  --aero-bubble-density: 1;
+  --aero-bubble-speed: .88;
+  --aero-tilt-strength: 1.5;
+  --aero-cursor-tug: 1.16;
+  --aero-shine-travel: 1.18;
+  --aero-pointer-light: 1.19;
+  --aero-acrylic-opacity: 1;
+  --aero-plastic-gloss: 1.5;
+  --aero-enamel-highlight: 1.06;
+  --aero-bubble-edge: 1.6;
+  --aero-lens-reflection: 1;
+
   --radius-panel: 2rem;
   --radius-card: 1.65rem;
   --radius-control: 999px;
@@ -29,4 +82,57 @@
   --content-width: 1120px;
   --font-body: Nunito, ui-rounded, "Segoe UI", system-ui, sans-serif;
   --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+}
+
+:root[data-sky="morning"] {
+  --sky-top: #70dcff;
+  --sky-mid: #c1f3ff;
+  --sky-horizon: #ebffb9;
+  --sky-bottom: #a9e65c;
+  --environment-cloud-highlight: rgba(255,255,255,.92);
+  --environment-aqua-reflection: rgba(64,211,244,.82);
+  --environment-green-bounce: rgba(169,239,76,.17);
+  --environment-edge-tint: rgba(151,242,255,.26);
+  --bubble-environment-tint: rgba(98,218,245,.3);
+}
+
+:root[data-sky="midday"] {
+  --sky-top: #3dc8ff;
+  --sky-mid: #8fe8ff;
+  --sky-horizon: #d5ffae;
+  --sky-bottom: #78cf3f;
+}
+
+:root[data-sky="sunset"] {
+  --sky-top: #42c9ee;
+  --sky-mid: #ffd0ae;
+  --sky-horizon: #ffe6a8;
+  --sky-bottom: #d987c8;
+  --environment-cloud-highlight: rgba(255,249,239,.9);
+  --environment-aqua-reflection: rgba(45,196,230,.78);
+  --environment-green-bounce: rgba(202,228,101,.18);
+  --environment-edge-tint: rgba(255,188,177,.3);
+  --bubble-environment-tint: rgba(102,207,234,.3);
+}
+
+:root[data-sky="night"] {
+  --ink: #e8f8ff;
+  --ink-soft: #c8e8f5;
+  --muted: #a4ccdd;
+  --sky-top: #0b3473;
+  --sky-mid: #08739d;
+  --sky-horizon: #176478;
+  --sky-bottom: #123e50;
+  --environment-cloud-highlight: rgba(205,244,255,.56);
+  --environment-aqua-reflection: rgba(37,202,242,.68);
+  --environment-green-bounce: rgba(129,224,92,.16);
+  --environment-edge-tint: rgba(112,224,255,.26);
+  --bubble-environment-tint: rgba(58,190,228,.3);
+  --material-acrylic-edge: rgba(128,169,139,.32);
+  --glass-fallback: #184761;
+  --glass-tint: rgba(18,74,102,.58);
+  --glass-strong: rgba(18,67,94, calc(.74 * var(--aero-glass-opacity, .72)));
+  --glass-soft: rgba(20,75,96, calc(.8 * var(--aero-acrylic-opacity, 1)));
+  --edge-light: rgba(205,244,255,.78);
+  --edge-shadow: rgba(1,25,51,.64);
 }

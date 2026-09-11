@@ -1,7 +1,15 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import type { PageId } from "../data/site";
+import { AeroIcon, type AeroIconKind } from "./AeroIcon";
 import { navigation } from "../data/site";
-import { GlassSurface } from "./GlassSurface";
+
+const navigationIcons: Record<PageId, AeroIconKind> = {
+  home: "about",
+  work: "project",
+  about: "about",
+  resume: "resume",
+  contact: "contact",
+};
 
 export function Navigation({ activePage, onNavigate }: { activePage: PageId; onNavigate: (page: PageId) => void }) {
   const shellRef = useRef<HTMLDivElement>(null);
@@ -33,7 +41,7 @@ export function Navigation({ activePage, onNavigate }: { activePage: PageId; onN
   return (
     <header className="site-header">
       <span className={`mobile-menu-backdrop ${isMenuOpen ? "is-visible" : ""}`} aria-hidden="true" />
-      <GlassSurface as="nav" variant="nav" className="site-nav" aria-label="Primary navigation">
+      <nav className="glass-nav site-nav" aria-label="Primary navigation">
         <a className="brand-mark" href="#home" onClick={() => onNavigate("home")} aria-label="Andy Sin home">AS</a>
         <button
           className="nav-menu-toggle"
@@ -63,12 +71,13 @@ export function Navigation({ activePage, onNavigate }: { activePage: PageId; onN
                 aria-current={activePage === item.id ? "page" : undefined}
                 onClick={() => onNavigate(item.id)}
               >
-                {item.label}
+                <AeroIcon kind={navigationIcons[item.id]} size={14} />
+                <span>{item.label}</span>
               </a>
             ))}
           </div>
         </div>
-      </GlassSurface>
+      </nav>
     </header>
   );
 }

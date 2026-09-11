@@ -20,6 +20,10 @@ export type Project = {
   imageAlt: string;
   technologies: string[];
   category: "software" | "hardware" | "robotics";
+  accentColor: string;
+  glowColor: string;
+  reflectionColor: string;
+  tagBackground: string;
   links: { source?: string; demo?: string; writeup?: string };
   featured?: boolean;
 };
@@ -36,6 +40,10 @@ export const projects: Project[] = [
     imageAlt: "Frutiger styled preview of Andy's personal website",
     technologies: ["HTML", "CSS", "React", "TypeScript", "GitHub Pages"],
     category: "software",
+    accentColor: "#008fac",
+    glowColor: "rgba(0,143,172,.24)",
+    reflectionColor: "rgba(86,224,255,.3)",
+    tagBackground: "rgba(86,224,255,.18)",
     links: {},
     featured: true,
     notes: {
@@ -56,6 +64,10 @@ export const projects: Project[] = [
     imageAlt: "Preview of the SinnerPad macropad",
     technologies: ["KiCad", "Seeed XIAO RP2040", "KMK", "Cherry MX switches", "SK6812MINI-E", "Onshape", "3D printing"],
     category: "hardware",
+    accentColor: "#4b9d46",
+    glowColor: "rgba(75,157,70,.24)",
+    reflectionColor: "rgba(173,244,102,.28)",
+    tagBackground: "rgba(173,244,102,.2)",
     links: {},
     featured: true,
   },
@@ -68,6 +80,10 @@ export const projects: Project[] = [
     imageAlt: "Preview of the Game Title Screen for the Shiba Arcade Game",
     technologies: ["Godot", "GDScript", "Raspberry Pi 4 8 GB", "Procedural gameplay", "Original art/audio", "Electronics"],
     category: "software",
+    accentColor: "#c76c33",
+    glowColor: "rgba(199,108,51,.24)",
+    reflectionColor: "rgba(255,185,112,.28)",
+    tagBackground: "rgba(255,185,112,.2)",
     links: {},
     featured: true,
   },
@@ -80,6 +96,10 @@ export const projects: Project[] = [
     imageAlt: "Preview of the FRC robot",
     technologies: ["Java", "WPILib Command-Based", "NetworkTables", "Limelight", "AprilTags", "SwerveDrivePoseEstimator", "Phoenix Tuner X", "PathPlanner", "Choreo"],
     category: "robotics",
+    accentColor: "#456ed0",
+    glowColor: "rgba(69,110,208,.24)",
+    reflectionColor: "rgba(125,174,255,.3)",
+    tagBackground: "rgba(125,174,255,.18)",
     links: {},
     featured: false,
   },

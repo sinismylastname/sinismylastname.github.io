@@ -1,5 +1,6 @@
 import { createPortal } from "react-dom";
 import { useEffect, useRef } from "react";
+import { getAeroRuntimeSettings } from "../data/aeroRuntime";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 const INTERACTIVE_SELECTOR = "a, button, input, textarea, select";
@@ -44,15 +45,19 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
     let velocity = { x: 0, y: 0 };
     let current = hiddenState();
     let desired = hiddenState();
+    let viewportFrame: number | null = null;
+    let viewportDirty = false;
     const clearTargetCache = () => {
       lockedBounds = null;
       lockedRadius = 12;
+      viewportDirty = false;
     };
     const refreshTargetCache = () => {
       if (!lockedTarget) return false;
       lockedBounds = lockedTarget.getBoundingClientRect();
       const styles = getComputedStyle(lockedTarget);
       lockedRadius = parseFloat(styles.borderRadius) || 12;
+      viewportDirty = false;
       return true;
     };
     const setLockedTarget = (target: HTMLElement | null) => {
@@ -73,6 +78,8 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
         active: desired.active,
         visible: desired.visible,
       };
+      document.documentElement.style.setProperty("--pointer-light-x", `${(lastPointer.x / Math.max(window.innerWidth, 1)) * 100}%`);
+      document.documentElement.style.setProperty("--pointer-light-y", `${(lastPointer.y / Math.max(window.innerHeight, 1)) * 100}%`);
       cursor.style.setProperty("--cursor-x", `${current.x}px`);
       cursor.style.setProperty("--cursor-y", `${current.y}px`);
       cursor.style.setProperty("--cursor-width", `${current.width}px`);
@@ -89,7 +96,7 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
         ghost.dataset.visible = current.visible ? "true" : "false";
       }
 
-      const stillMoving = desired.visible || current.visible || [
+      const stillMoving = [
         current.x - desired.x,
         current.y - desired.y,
         current.width - desired.width,
@@ -142,8 +149,10 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
       }
       lastPointer = { x: event.clientX, y: event.clientY, time: now };
 
-      const tugX = Math.max(-MAX_TUG, Math.min(MAX_TUG, velocity.x * 10));
-      const tugY = Math.max(-MAX_TUG, Math.min(MAX_TUG, velocity.y * 10));
+      const { cursorTug } = getAeroRuntimeSettings();
+      const maxTug = MAX_TUG * cursorTug;
+      const tugX = Math.max(-maxTug, Math.min(maxTug, velocity.x * 10));
+      const tugY = Math.max(-maxTug, Math.min(maxTug, velocity.y * 10));
       const rotate = Math.max(-2.5, Math.min(2.5, velocity.x * 2.5));
       const eventElement = event.target instanceof Element ? event.target : null;
       const ignoredTarget = eventElement?.closest<HTMLElement>(CURSOR_IGNORE_SELECTOR);
@@ -154,6 +163,7 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
       } else if (hoveredTarget) {
         setLockedTarget(hoveredTarget);
       } else if (lockedTarget) {
+        if (viewportDirty) refreshTargetCache();
         const bounds = lockedBounds ?? (refreshTargetCache() ? lockedBounds : null);
         if (!bounds) return;
         const outsideX = Math.max(bounds.left - event.clientX, 0, event.clientX - bounds.right);
@@ -163,8 +173,9 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
 
       updateDesired(tugX, tugY, rotate);
     };
-    const onViewportChange = () => {
-      if (!hasPointer || !lockedTarget) return;
+    const syncViewport = () => {
+      viewportFrame = null;
+      if (!hasPointer || !lockedTarget || !viewportDirty) return;
       refreshTargetCache();
       const bounds = lockedBounds;
       if (!bounds) return;
@@ -175,6 +186,11 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
         return;
       }
       updateDesired(0, 0, 0, true);
+    };
+    const onViewportChange = () => {
+      if (!hasPointer || !lockedTarget) return;
+      viewportDirty = true;
+      if (viewportFrame === null) viewportFrame = requestAnimationFrame(syncViewport);
     };
     const onFocusIn = (event: FocusEvent) => {
       const focused = event.target instanceof HTMLElement
@@ -205,6 +221,10 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
       if (frameRef.current !== null) {
         cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
+      }
+      if (viewportFrame !== null) {
+        cancelAnimationFrame(viewportFrame);
+        viewportFrame = null;
       }
     };
   }, [enabled, reducedMotion]);

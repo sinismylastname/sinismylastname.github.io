@@ -546,3 +546,213 @@ Changes:
 Cursor size, morph target bounds, release distance, velocity tug, rotation limits, native-cursor mode, reduced-motion behavior, and fine-pointer gating are unchanged.
 
 Validation after this tuning passed: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+
+### Frutiger Aero material and environment evolution — September 2026
+
+Implemented the first visual evolution pass from `README_FRUTIGER_AERO_EVOLUTION.md` without adding WebGL, DOM capture, new continuous animation systems, or Aero Lab yet.
+
+Changes:
+
+- `app/src/styles/tokens.css`
+  - Added grouped environment tokens for sky, cloud, aqua reflection, green bounce, and edge tint.
+  - Added explicit material-role tokens for heavy glass, acrylic, plastic, enamel, lens, and bubbles.
+  - Current midday values remain the default baseline.
+  - Added morning, midday, sunset, and night environment overrides.
+  - Night overrides include lighter text colors and darker glass fallbacks so content remains readable against the deep sky.
+- `app/src/styles/components.css`
+  - Navigation now uses the heavier polished-glass material role.
+  - Buttons use a distinct glossy-plastic treatment with a stronger upper highlight and lower inset depth.
+  - Project cards and reading panels use calmer acrylic treatment rather than sharing the strongest button/navigation styling.
+  - The logo uses a more enamel/lacquer-like highlight and rim treatment.
+  - The cursor uses the lens highlight/tint tokens; cursor logic and interaction behavior are unchanged.
+- `app/src/styles/globals.css`
+  - The body sky and ambient lighting now consume environment tokens.
+  - Bubble material now includes a static crescent highlight, secondary highlight, cyan environmental tint, rim, and inset depth.
+  - All 16 bubble elements remain present with their existing positions, sizes, timings, transform/opacity animation, responsive rules, and pointer-inert behavior.
+- `app/src/data/sky.ts`
+  - Added pure `SkyState` helpers and deterministic hour mapping:
+    - morning: 05:00–10:59
+    - midday: 11:00–16:59
+    - sunset: 17:00–20:59
+    - night: 21:00–04:59
+- `app/src/main.tsx`
+  - Sets `html[data-sky]` once during initialization based on local time.
+  - In development, `?sky=morning`, `?sky=midday`, `?sky=sunset`, or `?sky=night` forces a state for visual inspection and testing.
+  - No timer or continuous time-based computation was added.
+
+Preserved behavior:
+
+- Existing pointer tilt and custom cursor behavior.
+- Native cursor/coarse-pointer fallback and reduced-motion behavior.
+- Keyboard focus indicators and modal/mobile-menu accessibility.
+- Opaque/fallback material behavior and print styles.
+- Pointer-inert decorative background layers.
+- Hidden-document animation pausing.
+- Current lively bubble count; bubble quality improved without increasing density or motion.
+
+Validation after the evolution pass passed:
+
+```text
+npm run check
+npm run build
+npm test
+for test in tests/validate_*.py; do python3 "$test" || exit 1; done
+git diff --check
+```
+
+This pass does not claim measured performance gains because no reliable before/after interaction trace is available. Aero Lab, project-specific reflection colors, original iconography, and future optional effects remain intentionally deferred until the material/environment foundation is reviewed.
+
+
+### Smoothed glass hover shadow — September 2026
+
+The hover shadow on interactive glass surfaces appeared too sudden because the acrylic base shadow had two shadow layers while the hover shadow had four. CSS could not interpolate between the two shadow-list shapes smoothly, so the change could appear discrete despite the existing transition.
+
+Changes:
+
+- `app/src/styles/tokens.css`: changed the acrylic base shadow to four matching layers while keeping it visually softer than the hover state.
+- `app/src/styles/components.css`: changed the glossy button base shadow to four matching layers so its hover state also interpolates correctly.
+- `app/src/styles/components.css`: increased the glass surface shadow transition from `260ms ease` to `360ms var(--ease-spring)` and the border transition to `300ms ease`.
+
+Hover and keyboard-focus states continue to use the same target shadow, focus behavior, reduced-motion rules, and material styling; only the transition path is smoother.
+
+Validation passed after this fix: `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, and `git diff --check`.
+
+
+## Mobile navbar correction (September 2026)
+
+The compact mobile navbar’s diagonal beam came from the generic glass surface treatment being applied to navigation: `.glass-surface::after` creates a tall, rotated sheen intended for larger glass panels, and translucent mobile navigation also allowed ambient/background layers to remain visible through that sheen. The navigation is now decoupled from `GlassSurface` and renders as a standalone `<nav className="glass-nav site-nav">`, with its own border, radius, shadow, stacking context, and desktop blur.
+
+At widths up to 639px, the navbar now uses an opaque light glass fallback (`#f6fdff`) with no background image, no backdrop sampling, and explicit suppression of both possible nav pseudo-elements. The mobile body light layers and the large ambient clouds, waves, and orbs are reduced/hidden at mobile widths. The compact dropdown remains separately styled and positioned with `overflow: visible` on the navbar, and all bubble streams remain present so the mobile atmosphere stays lively. Desktop glass behavior is unchanged.
+
+Validation completed after the final isolation rule:
+
+- `npm run check`
+- `npm run build`
+- `npm test`
+- Every `tests/validate_*.py` validator
+- `git diff --check`
+
+All completed successfully. Source inspection also confirms that `Navigation.tsx` no longer imports or renders `GlassSurface`, and the generated build is produced from the corrected standalone navigation. A browser computed-style/DOM inspection tool is not available in this environment, so if an already-open preview still shows the old beam, refresh it or restart the preview against the latest build before judging the visual result.
+
+
+### Full Frutiger Aero evolution pass — September 2026
+
+Implemented the README_FRUTIGER_AERO_EVOLUTION.md direction through the existing lightweight React/Vite architecture without adding WebGL, a new dependency, or continuous sky computation.
+
+Changes:
+
+- `app/src/styles/tokens.css`: increased the saturation and contrast of the cyan sky, turquoise reflection, lime horizon, sunset, and night states; preserved the one-time local-time `data-sky` system; added explicit Aero Lab variables for glass, environment, interaction, material, bubble, and lens tuning.
+- `app/src/styles/globals.css`: applied the stronger environment color to the sky-light layer; improved the retained 16 bubble streams with a white crescent, secondary highlight, subtle pink/yellow thin-film tint, cyan rim, varied blur/depth, configurable opacity, and configurable slow speed. Bubble motion remains transform/opacity based, visibility pausing remains intact, and mobile/reduced-motion reductions remain intact.
+- `app/src/styles/components.css`: reinforced the material taxonomy: heavy navigation glass, calmer acrylic cards/panels, glossy plastic CTAs, enamel logo treatment, bubble material, and optical-lens reflection variables. Static upper reflections, pale green lower bounce, aqua edge tint, blue underside shadow, and pointer-driven pre-painted reflection movement now share the same environment. The mobile navbar’s opaque fill, disabled backdrop sampling, pseudo-element suppression, dropdown overflow, and z-index isolation were left intact.
+- `app/src/data/projects.ts` and `app/src/components/ProjectCard.tsx`: added project-specific accent, glow, reflection, and tag-background tokens. Cards now use those tokens for their image sheen, category marker, index, metadata pills, and reflected color while retaining the shared layout and readable content.
+- `app/src/components/AeroIcon.tsx` and `app/src/components/Navigation.tsx`: added a small original inline SVG icon language for software, hardware, robotics, projects, about, resume, and contact. Icons are decorative, non-focusable, and used sparingly in navigation and project categories.
+- `app/src/hooks/usePointerTilt.ts` and `app/src/components/CustomCursor.tsx`: exposed local reflection coordinates, global pointer-light coordinates, configurable tilt strength, configurable reflection travel, and configurable cursor tug through the existing requestAnimationFrame paths. No per-frame React rendering or per-pixel distortion was added.
+- `app/src/data/aeroSettings.ts`, `app/src/hooks/useAeroSettings.ts`, `app/src/components/AeroLab.tsx`, and `app/src/components/AppShell.tsx`: added the hidden `Shift + A` Aero Lab. It provides grouped glass, environment, interaction, and material sliders; localStorage persistence under `aeroLab.settings.v1`; reset; JSON copy; JSON export; JSON import; and safe range clamping for imported presets. The panel is keyboard-operable, labelled, and visually isolated above the site without blocking normal content.
+- `app/src/hooks/useHashPage.ts`: reduced automatic page-top scrolling after hash navigation from 900ms to 520ms. The cubic ease-out, cancellation on interrupted navigation, `startViewTransition` support, and immediate reduced-motion behavior remain. The animation temporarily locks the root `scroll-behavior` to `auto` and restores it on completion, interruption, or cleanup so browser smooth scrolling cannot compound the custom timing.
+
+Validation after the final implementation passed:
+
+- `npm run check`
+- `npm run build`
+- `npm test`
+- Every `tests/validate_*.py` script
+- `git diff --check`
+
+The current implementation follows the README's static-first material, bubble quality, project reflection, cursor-light, icon, local-time environment, Aero Lab, accessibility, reduced-motion, mobile, and performance guidance. No commit, push, or Git configuration change was made.
+
+## Current state update — trace-informed performance correction
+
+### Changes in this session
+
+- Added `app/src/data/aeroRuntime.ts`, a shared cached snapshot for the JavaScript interaction settings (`tiltStrength`, `cursorTug`, and `shineTravel`). `useAeroSettings` invalidates the snapshot whenever Aero Lab writes new root variables, so live tuning still updates immediately without computed-style reads in pointer hot paths.
+- Updated `usePointerTilt.ts` to cache each surface’s `getBoundingClientRect()` result. Bounds are invalidated on pointer re-entry, relevant document scrolling, and resize, while pointer events remain coalesced through one `requestAnimationFrame`.
+- Updated `CustomCursor.tsx` to use the shared settings snapshot, coalesce locked-target geometry refreshes during scroll/resize, and stop its interpolation RAF once the cursor reaches its desired state instead of running continuously while visible. The fine-pointer gate, reduced-motion gate, compact-target morphing, `MAX_TUG` behavior, and portal stacking remain unchanged.
+- Reduced lower-priority `.glass-card` and `.glass-panel` backdrop blur to 6px and 8px respectively, while retaining stronger blur for navigation and modal surfaces. The 16 lively ambient bubbles and mobile navbar isolation were not changed.
+- Neutralized the shared glass-surface reflection so project-specific colors no longer bleed across entire cards. Project reflection colors remain bounded to `.project-media::after`, with accents still used for categories, indices, and tags.
+
+### Trace context and limitations
+
+The local Chrome trace pointed to repeated pointer/layout work and compositing pressure, including `usePointerTilt.ts`, `CustomCursor.tsx`, `UpdateLayoutTree`, animation frames, and GPU tasks. DevTools/V8 profiler and browser extension activity were present, so the trace is directional rather than a clean production benchmark; capture a fresh production-style trace to quantify the before/after delta.
+
+### Validation
+
+Passed from the repository root:
+
+```text
+npm run check
+npm run build
+npm test
+for test in tests/validate_*.py; do python3 "$test" || exit 1; done
+git diff --check
+```
+
+## Current state update — neutral glass interaction refinement
+
+### Changes in this session
+
+- Glass reflection is hidden at rest and appears only on interactive surfaces during `:hover` or `:focus-within`, so inactive cards and panels no longer carry a persistent diagonal shine. Keyboard focus retains the same active reflection state alongside the existing border/focus treatment.
+- Reduced-motion mode keeps the reflection static and subdued: it remains hidden at rest, uses a lower opacity only for hover/focus states, and does not animate the reflection transition.
+- Reworked the daylight glass material from blue-tinted acrylic to a neutral pearlescent white with a soft green edge and neutralized shadows. Buttons, the Aero Lab, and notes modal now use the same white/soft-green material direction.
+- The saturated sky, bubbles, environmental aqua, and intentional project accents remain colorful; night glass overrides, mobile navbar isolation, fine-pointer gating, and the previous pointer/layout performance safeguards remain unchanged.
+
+### Validation
+
+Passed after this refinement:
+
+```text
+npm run check
+npm run build
+npm test
+for test in tests/validate_*.py; do python3 "$test" || exit 1; done
+git diff --check
+```
+
+## Current state update — fixed Aero production preset
+
+### Changes in this session
+
+- Removed the Aero Lab panel and its Shift+A keyboard listener from the application.
+- Removed the `useAeroSettings` localStorage/settings hook, so old `aeroLab.settings.v1` browser data can no longer override the production design.
+- Simplified `aeroSettings.ts` to retain only the shared settings shape and the accepted fixed defaults. The static `:root` variables in `tokens.css` are now the authoritative configuration source.
+- Kept `aeroRuntime.ts` for the tilt, cursor tug, and shine-travel JavaScript consumers; it now reads the static root variables without a live invalidation path.
+- Removed Aero Lab-only CSS while preserving the glass interaction, neutral pearlescent material, reduced-motion behavior, mobile navbar isolation, pointer safeguards, and 16-bubble background.
+
+### Permanent accepted preset
+
+```json
+{
+  "glassOpacity": 0.72,
+  "glassReflection": 1.5,
+  "glassBlur": 0.55,
+  "upperRim": 1.5,
+  "greenBounce": 1,
+  "skySaturation": 1.2,
+  "cloudBrightness": 1.4,
+  "bubbleDensity": 1,
+  "bubbleSpeed": 0.88,
+  "tiltStrength": 1.5,
+  "cursorTug": 1.16,
+  "shineTravel": 1.18,
+  "pointerLight": 1.19,
+  "acrylicOpacity": 1,
+  "plasticGloss": 1.5,
+  "enamelHighlight": 1.06,
+  "bubbleEdge": 1.6,
+  "lensReflection": 1
+}
+```
+
+The former Aero Lab documentation is historical; visual tuning is intentionally fixed for the satisfied production direction.
+
+### Validation
+
+Passed after removing Aero Lab and freezing the preset:
+
+```text
+npm run check
+npm run build
+npm test
+for test in tests/validate_*.py; do python3 "$test" || exit 1; done
+git diff --check
+```

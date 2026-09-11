@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, type CSSProperties } from "react";
 import type { Project } from "../data/projects";
+import { AeroIcon } from "./AeroIcon";
 import { GlassSurface } from "./GlassSurface";
 import { GlassButton } from "./GlassButton";
 import { ProjectNotesModal } from "./ProjectNotesModal";
@@ -8,11 +9,18 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
   const [expanded, setExpanded] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
   const closeNotes = useCallback(() => setNotesOpen(false), []);
+  const projectStyle = {
+    "--project-accent": project.accentColor,
+    "--project-glow": project.glowColor,
+    "--project-reflection": project.reflectionColor,
+    "--project-tag-bg": project.tagBackground,
+  } as CSSProperties;
+
   return (
-    <GlassSurface as="article" variant="card" interactive className={`project-card ${featured ? "is-featured" : ""}`}>
+    <GlassSurface as="article" variant="card" interactive className={`project-card ${featured ? "is-featured" : ""}`} style={projectStyle}>
       <div className="project-media">
         <img src={project.image} alt={project.imageAlt} width="640" height="400" loading="lazy" />
-        <span className="project-category">{project.category}</span>
+        <span className="project-category"><AeroIcon kind={project.category} size={14} /><span>{project.category}</span></span>
       </div>
       <div className="project-content">
         <div className="project-heading-row">
