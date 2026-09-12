@@ -4,8 +4,6 @@
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#98e6ff"/><stop offset=".52" stop-color="#2ec9de"/><stop offset="1" stop-color="#087fb6"/></linearGradient>
     <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d9ff85"/><stop offset="1" stop-color="#83cc40"/></linearGradient>
-    <radialGradient id="orb" cx="30%" cy="18%" r="78%"><stop stop-color="#f7ffff"/><stop offset=".08" stop-color="#a8f4ff"/><stop offset=".48" stop-color="#21c9ed"/><stop offset=".78" stop-color="#087fb8"/><stop offset="1" stop-color="#064a89"/></radialGradient>
-    <linearGradient id="orb-rim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity=".98"/><stop offset=".6" stop-color="#9befff" stop-opacity=".7"/><stop offset="1" stop-color="#74c84d" stop-opacity=".62"/></linearGradient>
     <filter id="shadow"><feDropShadow dx="0" dy="14" stdDeviation="13" flood-color="#075c90" flood-opacity=".25"/></filter>
   </defs>
   <rect width="720" height="720" rx="84" fill="url(#sky)"/>
@@ -15,10 +13,5 @@
   <path d="M0 479C104 397 215 422 319 497c120 87 233 56 401-49v272H0z" fill="url(#hill)"/>
   <path d="M0 561c144-72 245-16 358 38 105 50 224 44 362-36v157H0z" fill="#57c3d5" opacity=".82"/>
   <circle cx="580" cy="468" r="42" fill="#fff" opacity=".32"/><circle cx="629" cy="414" r="18" fill="#fff" opacity=".5"/>
-  <g filter="url(#shadow)">
-    <circle cx="360" cy="342" r="142" fill="url(#orb)" stroke="url(#orb-rim)" stroke-width="7"/>
-    <ellipse cx="324" cy="277" rx="76" ry="31" fill="#fff" opacity=".35" transform="rotate(-18 324 277)"/>
-    <ellipse cx="360" cy="456" rx="98" ry="23" fill="#a8e84f" opacity=".24"/>
-    <text x="360" y="404" fill="#e8fbff" stroke="#07518a" stroke-opacity=".36" stroke-width="4" paint-order="stroke" font-family="Arial, Helvetica, sans-serif" font-size="146" font-weight="800" text-anchor="middle" letter-spacing="-12">AS</text>
-  </g>
+  <g filter="url(#shadow)"><rect x="116" y="190" width="488" height="300" rx="116" fill="#fff" fill-opacity=".78" stroke="#fff" stroke-opacity=".9" stroke-width="5"/><text x="360" y="392" fill="#11456b" font-family="Arial, Helvetica, sans-serif" font-size="190" font-weight="800" text-anchor="middle" letter-spacing="-18">AS</text></g>
 </svg>
