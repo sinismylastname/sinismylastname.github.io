@@ -12,6 +12,7 @@ The site combines:
 - Hash-based navigation between Home, Portfolio, About, Resume, and Contact.
 - A Frutiger Aero visual system: aqua sky colors, green accents, bubbles, clouds, waves, translucent surfaces, and glass-like controls.
 - Interactive glass cards and buttons.
+- A progressive raw-WebGL environment canvas for procedural water, GPU bubbles, caustics, pointer lighting, and a home-only reflective orb.
 - A custom cursor for fine-pointer desktop devices.
 - Contextual build notes shown in a modal from the StarterPack project.
 - A custom desktop scroll-progress control that falls back to the native scrollbar on mobile and coarse-pointer devices.
@@ -31,7 +32,8 @@ repository-root/
 │       ├── hooks/                 Reusable stateful browser behavior
 │       ├── main.tsx               React mounting point
 │       ├── pages/                 Page-level compositions
-│       └── styles/                Design tokens and CSS
+│       ├── styles/                Design tokens and CSS
+│       └── webgl/                 Optional raw-WebGL renderer and quality policy
 ├── images/                        Static image assets imported by the app
 ├── tests/                         Dependency-free Python validators
 ├── .github/workflows/             GitHub Pages deployment workflow
@@ -129,20 +131,25 @@ The valid pages are:
 home, work, about, resume, contact
 ```
 
-The page transition uses `requestAnimationFrame`, which schedules visual updates in sync with the browser’s rendering loop. The 900ms cubic ease makes navigation feel slower and more deliberate. When reduced motion is enabled, the hook jumps immediately instead.
+The page transition uses `requestAnimationFrame`, which schedules visual updates in sync with the browser’s rendering loop. The 520ms cubic ease makes navigation feel deliberate. When reduced motion is enabled, the hook jumps immediately instead.
 
 ### `app/src/components/AppShell.tsx`
 
 `AppShell` is the shared frame around every page. Its render order is important:
 
-1. `AmbientBackground`: decorative, pointer-transparent visual layers.
-2. `ScrollProgress`: desktop scroll line and draggable thumb.
-3. `CustomCursor`: the cursor layer, portaled to `document.body`.
-4. `Navigation`: sticky site navigation.
-5. `<main id="main-content">`: the active page.
-6. Footer.
+1. `AeroEnvironmentCanvas`: optional decorative WebGL environment, transparent and pointer-inert.
+2. `AmbientBackground`: authored CSS visual layers and fallback atmosphere.
+3. `ScrollProgress`: desktop scroll line and draggable thumb.
+4. `CustomCursor`: the cursor layer, portaled to `document.body`.
+5. `Navigation`: sticky site navigation.
+6. `<main id="main-content">`: the active page.
+7. Footer.
 
 The `key={activePage}` on `.page-transition` causes the page wrapper to remount when the page changes, allowing the page-entry animation to run again.
+
+The `AeroEnvironmentCanvas` is a single `aria-hidden` canvas shared by all supported hash pages. It is enabled by default unless `VITE_AERO_WEBGL=false` or development `?webgl=0` is used, and it keeps the CSS background and glass layers as the fallback. The renderer uses one fullscreen triangle and one visible RAF; reduced motion renders one static frame, while unsupported WebGL, print, hidden visibility, context loss, low-quality paths, and cleanup remove or pause the enhancement without changing page semantics. The standard path combines water, quality-gated GPU bubbles, subtle caustics, shared pointer lighting, and a desktop home-only reflective orb. The analytic refraction branch remains a development-only comparison (`?refraction=1`) and is not a production default.
+
+The typed WebGL environment and CSS environment variables retain the same internal four-state model (`morning`, `midday`, `sunset`, `night`) for future experiments. Production currently selects `midday` once, with no clock or `?sky=` override, and their material values remain separate projections so CSS can render when WebGL is absent.
 
 ## 4. Pages and content
 
@@ -522,7 +529,8 @@ Use headings, links, buttons, forms, landmarks, labels, and ARIA only where need
 The site adds custom effects only when the device and user preference support them:
 
 - Touch devices keep native scrolling and cursors.
-- Reduced-motion users receive less animation.
+- Reduced-motion users receive less animation and a static WebGL water frame.
+- WebGL is default-on progressive enhancement, capability-gated, and keeps the CSS/DOM interface as fallback.
 - Glass has an opaque fallback.
 - Navigation works through ordinary URL hashes.
 - The contact form still uses native browser validation.
@@ -609,8 +617,9 @@ These are current facts, not necessarily bugs:
 - The contact form validates in the browser but does not send or persist messages. A backend or form provider would be required for delivery.
 - The notes dialog does not currently implement a complete focus trap.
 - There is no browser end-to-end test suite or visual regression suite.
+- The optional WebGL layer has passed repository checks but has not received browser visual, GLSL execution, GPU frame-time/dropped-frame, cross-device, or thermal profiling in this workspace.
 - Google Fonts are imported from `tokens.css`, so typography may differ when offline or when the font request fails.
-- The custom LiquidGlass treatment is CSS-based. True background refraction would require a heavier WebGL capture/shader pipeline.
+- The custom LiquidGlass treatment is CSS-based. True background refraction would require a heavier WebGL capture/shader pipeline; the current analytic refraction branch remains development-only and reject/defer for production.
 - `motion` is installed but not currently imported by application source.
 
 When documentation conflicts with the implementation, inspect the source and update this document rather than assuming an older description is correct.

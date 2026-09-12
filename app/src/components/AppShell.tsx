@@ -1,5 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
+import type { AeroEnvironment } from "../data/aeroEnvironment";
 import type { PageId } from "../data/site";
+import { AeroEnvironmentCanvas } from "./AeroEnvironmentCanvas";
 import { AmbientBackground } from "./AmbientBackground";
 import { CursorModeToggle } from "./CursorModeToggle";
 import { CustomCursor } from "./CustomCursor";
@@ -18,10 +20,12 @@ function readNativeCursorPreference() {
 }
 
 export function AppShell({
+  environment,
   activePage,
   onNavigate,
   children,
 }: {
+  environment: AeroEnvironment;
   activePage: PageId;
   onNavigate: (page: PageId) => void;
   children: ReactNode;
@@ -43,6 +47,7 @@ export function AppShell({
 
   return (
     <div className="app-shell" data-cursor-mode={nativeCursor ? "native" : "smooth"}>
+      <AeroEnvironmentCanvas environment={environment} orbEnabled={activePage === "home"} />
       <AmbientBackground />
       <ScrollProgress />
       <CustomCursor enabled={!nativeCursor} />

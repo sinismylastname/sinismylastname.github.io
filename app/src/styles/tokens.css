@@ -20,6 +20,17 @@
   --environment-green-bounce: rgba(166,239,74,.2);
   --environment-edge-tint: rgba(117,235,255,.28);
 
+  /* Shared CSS aliases for the typed WebGL environment model. */
+  --environment-sky-top: var(--sky-top);
+  --environment-sky-mid: var(--sky-mid);
+  --environment-sky-horizon: var(--sky-horizon);
+  --environment-sky-bottom: var(--sky-bottom);
+  --environment-water: var(--environment-aqua-reflection);
+  --environment-ground-bounce: var(--environment-green-bounce);
+  --environment-specular: var(--environment-cloud-highlight);
+  --environment-star-intensity: 0;
+  --environment-caustic-intensity: 1;
+
   /* Material roles: heavy glass, soft acrylic, plastic, enamel, bubble, lens */
   --material-heavy-bg: var(--glass-strong);
   --material-heavy-rim: rgba(255,255,255,.96);

@@ -756,3 +756,111 @@ npm test
 for test in tests/validate_*.py; do python3 "$test" || exit 1; done
 git diff --check
 ```
+
+
+
+### Aero Media Center and blue Aero world update — September 2026
+
+Implemented the approved small-detail visual pass inspired by Andy’s supplied Frutiger Aero reference: bright blue water and sky, floating bubbles, bridge/infrastructure curves, skyline depth, airborne shapes, and an AIMP/Winamp/Windows-era media-console feeling.
+
+Files added:
+
+- `app/src/components/AeroMediaCenter.tsx`
+  - Adds a persistent bottom-right media gadget opposite the left-side cursor-mode toggle.
+  - Compact by default and expandable through a real keyboard-operable button.
+  - Uses `aria-expanded`, `aria-controls`, an accessible region label, Escape-to-close, and focus restoration to the launcher.
+  - Includes a blue beveled display, status LED, static spectrum meter, technical readouts, disabled transport controls, queue rows, and genre badges.
+  - Explicitly states that playback is not configured; there is no autoplay, audio element, third-party embed, or fake playing state.
+  - The widget remains available across hash-based page navigation and adapts to narrow screens and safe-area insets.
+
+- `app/src/data/media.ts`
+  - Defines typed future-facing media queue metadata.
+  - Uses fictional/descriptive standby entries based on Andy’s stated interests: swancore, orchestral, and Frutiger Aero core.
+  - Does not ship copyrighted audio or commit the site to an external music provider.
+
+- `app/src/components/AeroWorldScene.tsx`
+  - Adds an original decorative inline SVG scene to the Home hero only.
+  - Includes transparent bubble rings, haze, a distant technical skyline, bridge-like arcs, reflective water bands, and abstract airborne shapes.
+  - The scene is `aria-hidden`, pointer-transparent, static-first, and does not use WebGL, a large JPEG background, or a new continuous animation loop.
+
+Files updated:
+
+- `app/src/components/AppShell.tsx`: mounts the persistent media center with the existing global controls.
+- `app/src/pages/HomePage.tsx`: mounts the Aero world scene behind the existing hero copy and profile card.
+- `app/src/styles/tokens.css`: adds semantic scene and media-console roles plus morning, midday, sunset, and night scene overrides. The scene does not force a permanent green horizon; its water, haze, skyline, bridge, and reflection colors adapt with the existing day/night system.
+- `app/src/styles/components.css`: adds the media-console chrome, responsive positioning, hero-scene layering, reduced-motion-safe behavior, and print hiding while preserving the existing glass, cursor, navigation, and ambient systems.
+- `tests/validate_app.py`: adds source contracts for the media console, no-autoplay standby behavior, decorative scene semantics, scene tokens, and homepage mounting.
+
+User preferences preserved:
+
+- Existing day/night cycle remains authoritative.
+- Existing glassmorphism, morphing cursor, native cursor toggle, bubbles, and general layout remain in place.
+- The portfolio remains Frutiger-Aero-first, with stronger Windows 7, Windows Media Player, Winamp, and keygen-era visual language added as supporting detail rather than a full fake desktop shell.
+- Audio remains intentionally undecided and is not included in this visual-first pass. Any future audio must use owned/permitted or appropriately licensed sources and explicit user-initiated controls.
+
+Known limitations:
+
+- No real playback is available yet; the media center is an honest visual standby console.
+- The supplied reference image is used as a composition and mood reference, not shipped as a background asset or copied directly.
+- The hero scene uses original SVG geometry and static reflection bands rather than live water simulation or WebGL refraction.
+- Browser/device visual inspection is not available in this environment. Final follow-up inspection should cover desktop fine pointers, native cursor mode, mobile/coarse pointers, reduced motion, all four `?sky=` states, widget keyboard behavior, and print output.
+
+Validation completed successfully after this update:
+
+```text
+npm run check
+npm run build
+npm test
+for test in tests/validate_*.py; do python3 "$test" || exit 1; done
+git diff --check
+```
+
+The production build emitted the React/Vite bundle successfully. No commit, push, or Git configuration change was made.
+
+
+
+### Corrective Winamp reference refinement — September 2026
+
+The previously documented blue Aero world scene was rejected and is no longer part of the implementation. `AeroWorldScene.tsx` is absent, `HomePage.tsx` does not mount a scene, and the rejected scene selectors/tokens were removed from the active source. The portfolio keeps its existing ambient background, day/night cycle, glass surfaces, morphing cursor, and layout.
+
+The persistent media detail was refined against Andy's new Winamp-style reference image:
+
+- `app/src/components/AeroMediaCenter.tsx`
+  - Keeps a circular glass launcher in the collapsed state and hides it completely while the player window is open.
+  - Uses a bright `WINAMP` title bar with separate minimize, maximize/restore, and close buttons.
+  - Uses one restrained dark teal inset for the display; the shell, controls, and playlist are pale cyan/white glass.
+  - Adds CSS-generated Aero artwork, a segmented equalizer, time readout, repeat/shuffle affordances, large transport controls, a volume slider, and a playlist toggle.
+  - Keeps playlist rows formatted as number → two-line title/metadata → duration, but keeps the queue closed by default so it does not compete with the main player surface.
+  - Remains visual-only standby: no audio element, autoplay, external embed, or fake playback state.
+
+- `app/src/styles/components.css`
+  - Adds a final canonical reference-alignment layer for the glossy cyan Winamp composition, desktop width, mobile viewport fit, internal scrolling, safe-area spacing, and reduced-motion behavior.
+  - The player is fixed bottom-right opposite the cursor-mode toggle. The open panel owns its whole window footprint; no launcher bar remains underneath it.
+
+- `app/src/styles/tokens.css`
+  - Retains only the active environment/material roles and pale media-console roles. Rejected scene water, skyline, bridge, and reflection tokens are gone.
+
+- `tests/validate_app.py`
+  - Verifies the current media structure, responsive media styles, and absence of the rejected scene CSS/token contracts.
+
+Browser/device visual inspection was not available in this terminal session; restart the dev server or hard-refresh any already-running preview to clear stale Vite CSS.
+
+
+
+### Aero song-player removal — September 2026
+
+The experimental Aero/Winamp song player has been removed at the user's request after repeated visual and layout issues. The global `AppShell` mount, player component, media queue data, media tokens, and validator contracts are no longer active. The portfolio's existing Aero background, day/night cycle, glass surfaces, morphing cursor, navigation, and page layout remain unchanged.
+
+No audio behavior, third-party music service, autoplay, or player UI remains part of the product direction. Any future media treatment should be reconsidered from a fresh, smaller concept rather than extending the removed implementation.
+
+### WebGL water visibility pass — September 2026
+
+The WebGL architecture is now used for a visibly stronger default daytime environment rather than an opt-in demo. The canvas enables automatically in development and production unless `VITE_AERO_WEBGL=false`; development `?webgl=0` provides the CSS-only comparison. The fixed production environment remains midday/daytime, with the internal environment model retained for future use but no clock-based visual switching.
+
+The standard renderer path combines a narrow aqua horizon, stronger turquoise lower field, three slow low-frequency wave terms on high quality (fewer on lower tiers), finite-difference normals, broad and tight white/cyan sunlight reflections, moving ripple ribbons, and restrained lime environmental bounce. Water opacity is intentionally strong enough to remain visible behind the existing CSS ambience and glass. Quality-gated GPU bubbles and subtle caustics share the same draw pass; pointer lighting is shared module state, and the home page can replace only its authored orb with one analytic reflective orb on desktop high/balanced tiers. The old CSS ambient-wave bands are hidden only while the WebGL canvas is ready; CSS bubbles/orb are hidden only when their matching GPU replacement is active, while clouds and all DOM content remain intact.
+
+The refraction branch is an isolated analytic development comparison (`?refraction=1` or `VITE_AERO_REFRACTION=true`) for the same home orb; it does not capture DOM pixels and remains reject/defer for production. Aero Lab and the song player remain removed and must not be restored or referenced.
+
+Reduced-motion mode renders one static daytime water frame, while hidden-tab pause/resume, context recovery, print hiding, capped DPR, one canvas/context/renderer/fullscreen draw, and CSS fallback behavior remain preserved.
+
+Validation after this pass must include `npm run check`, `npm run build`, `npm test`, every `tests/validate_*.py` script, `git diff --check`, and browser comparison of the normal preview against `?webgl=0` at desktop and mobile sizes. The development `?gpu-bubbles=0` and `?refraction=1` comparisons isolate the optional branches. Browser visual, frame-time, dropped-frame, cross-device, and thermal evidence should be recorded before promoting any heavier refraction or DOM-capture milestone.

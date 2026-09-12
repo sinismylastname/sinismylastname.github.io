@@ -7,13 +7,14 @@ This is Andy Sin's interactive Frutiger Aero portfolio. It combines a cloudy, me
 The React app provides:
 
 - Home with introduction and featured projects
-- Notes with the original personal-site reflection
 - Portfolio with typed project cards and category filters
 - About with current interests
 - Resume with the existing education, experience, skills, projects, honors, and PDF download
 - Contact with native browser validation
 
-The React app is the only site implementation in the repository. It builds into `dist/` and publishes through GitHub Pages; the original static implementation was removed after the migration so there is one source of truth.
+The supported hash routes are `#home`, `#work`, `#about`, `#resume`, and `#contact`. `BlogPage.tsx` remains an unreachable legacy export; the old Notes content is attached to the StarterPack project modal.
+
+The React app and its progressive raw-WebGL water environment are the only site implementation in the repository. They build into `dist/` and publish through GitHub Pages; the original static implementation was removed after the migration so there is one source of truth.
 
 ## Built with
 
@@ -41,7 +42,15 @@ npm run preview
 
 ## Interaction and accessibility
 
-Interactive glass surfaces respond to fine-pointer movement with capped tilt and a shifting reflection. Touch devices receive regular pressed/focus states instead of simulated cursor tracking. Reduced-motion preferences disable tilt and ambient loops while preserving the same content and controls. The glass uses an opaque fallback when backdrop blur is unavailable, and the contact form remains native HTML.
+Interactive glass surfaces respond to fine-pointer movement with capped tilt and a shifting reflection. Touch devices receive regular pressed/focus states instead of simulated cursor tracking. The default WebGL layer is a daytime-only procedural water environment behind the authored CSS ambience and glass; reduced-motion preferences render one static water frame while preserving the same content and controls. The glass uses an opaque fallback when backdrop blur is unavailable, and the contact form remains native HTML.
+
+### Environment previews (development)
+
+The site uses a permanent midday/daytime Aero environment. WebGL water is enabled automatically in development and production; use `/?webgl=0#home` in development to compare the CSS-only fallback. The fixed environment remains internal and future-ready, but there is no automatic clock-based switching or production night mode.
+
+### WebGL quality policy
+
+When the WebGL layer is enabled, it chooses a conservative `high`, `balanced`, or `low` startup tier from viewport size, estimated render-pixel budget, hardware-concurrency hints, and device-pixel ratio. The tier stays fixed for that renderer session and scales wave complexity, DPR, GPU bubbles, caustics, and pointer-light work; the authored CSS/DOM interface remains the fallback. The home page also gets one analytic reflective orb on desktop high/balanced tiers. The optional refraction branch is isolated behind development `?refraction=1` (or `VITE_AERO_REFRACTION=true`) and is not a production default. Non-high conservative floors may be remembered for seven days, with storage failures ignored safely. This is not measured runtime FPS adaptation: browser smoke checks confirm the ready/fallback states, but GPU frame-time/dropped-frame and thermal profiling have not been performed in this workspace.
 
 ## Publish
 

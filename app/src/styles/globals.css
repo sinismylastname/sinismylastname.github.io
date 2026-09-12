@@ -13,7 +13,7 @@ html::-webkit-scrollbar-corner { background: rgba(102,203,238,.2); }
   html::-webkit-scrollbar { display: none; width: 0; height: 0; }
 }
 
-body { min-width: 0; min-height: 100vh; margin: 0; color: var(--ink); background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 38%, var(--sky-horizon) 73%, var(--sky-bottom) 100%); font-family: var(--font-body); font-size: 16px; line-height: 1.65; overflow-x: clip; overflow-wrap: anywhere; }
+body { min-width: 0; min-height: 100vh; margin: 0; color: var(--ink); background: linear-gradient(180deg, var(--environment-sky-top) 0%, var(--environment-sky-mid) 38%, var(--environment-sky-horizon) 73%, var(--environment-sky-bottom) 100%); font-family: var(--font-body); font-size: 16px; line-height: 1.65; overflow-x: clip; overflow-wrap: anywhere; }
 
 body::before { content: ""; position: fixed; inset: 0; z-index: -3; pointer-events: none; background: radial-gradient(ellipse at 14% 9%, var(--environment-cloud-highlight) 0 3.5rem, transparent 17rem), radial-gradient(ellipse at 88% 19%, var(--lime) 0 5rem, transparent 21rem), radial-gradient(ellipse at 76% 77%, var(--environment-aqua-reflection) 0 12rem, transparent 28rem); background-size: 180% 180%; transform-origin: center; filter: saturate(var(--aero-sky-saturation, 1.2)); opacity: var(--aero-cloud-brightness, 1.4); animation: sky-light-shift 28s ease-in-out infinite alternate; }
 
@@ -151,10 +151,12 @@ p { margin-top: 0; }
 }
 
 @media print {
+  :root { --ink: #000; --ink-soft: #000; --muted: #000; --deep-aqua: #000; }
   body { color: #000; background: #fff; }
-  body::before, body::after, .ambient-background, .site-header, .app-footer { display: none; }
+  body::before, body::after, .ambient-background, .site-header, .app-footer, .aero-environment-canvas { display: none; }
   .app-main { width: 100%; padding: 0; }
-  .glass-surface, .glass-surface::before, .glass-surface::after { background: #fff !important; box-shadow: none !important; backdrop-filter: none !important; }
+  .page-transition { animation: none !important; opacity: 1; transform: none; filter: none; }
+  .glass-surface, .glass-surface::before, .glass-surface::after { background: #fff !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
   .resume-page .section-heading h1 { color: #000; text-shadow: none; }
   .resume-sheet { border: 0 !important; }
 }
@@ -175,3 +177,10 @@ p { margin-top: 0; }
 .bubble-fifteen { --bubble-duration: 22s; }
 .bubble-sixteen { --bubble-duration: 27s; }
 .ambient-bubble { animation-duration: calc(var(--bubble-duration,22s) / var(--aero-bubble-speed,.88)); }
+
+
+.aero-environment-canvas { position: fixed; inset: 0; z-index: -2; display: block; width: 100%; height: 100%; pointer-events: none; background: transparent; opacity: 0; }
+.aero-environment-canvas[data-state="ready"] { opacity: 1; }
+.aero-environment-canvas[data-state="ready"] + .ambient-background .ambient-wave { display: none; }
+.aero-environment-canvas[data-state="ready"][data-bubbles="gpu"] + .ambient-background .ambient-bubble { display: none; }
+.aero-environment-canvas[data-state="ready"][data-orb="gpu"] + .ambient-background .ambient-orb-one { display: none; }

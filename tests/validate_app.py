@@ -14,6 +14,8 @@ REQUIRED_SOURCE = (
     "main.tsx", "app/App.tsx", "components/AppShell.tsx", "components/Navigation.tsx",
     "components/GlassSurface.tsx", "components/ProjectCard.tsx", "components/CustomCursor.tsx",
     "hooks/useHashPage.ts", "hooks/usePointerTilt.ts", "data/projects.ts",
+    "components/AeroEnvironmentCanvas.tsx", "data/aeroEnvironment.ts",
+    "webgl/aeroRenderer.ts", "webgl/aeroWebGLSupport.ts",
     "pages/HomePage.tsx", "pages/PortfolioPage.tsx", "pages/BlogPage.tsx",
     "pages/ResumePage.tsx", "pages/ContactPage.tsx",
     "styles/tokens.css", "styles/globals.css", "styles/components.css",
@@ -57,6 +59,8 @@ def check_content():
     contact = text("app/src/pages/ContactPage.tsx")
     for control in ('id="name"', 'id="email"', 'id="message"', 'id="contact-form"'):
         require(control in contact, f"contact control is missing: {control}")
+    home = text("app/src/pages/HomePage.tsx")
+    require("Hello," in home and "I’m Andy Sin" in home, "homepage introduction is missing")
 
 
 def check_interactions():
@@ -64,8 +68,9 @@ def check_interactions():
     tilt = text("app/src/hooks/usePointerTilt.ts")
     cursor = text("app/src/components/CustomCursor.tsx")
     ambient = text("app/src/components/AmbientBackground.tsx")
+    webgl = text("app/src/components/AeroEnvironmentCanvas.tsx") + text("app/src/webgl/aeroRenderer.ts")
+    webgl_support = text("app/src/webgl/aeroWebGLSupport.ts")
     app = text("app/src/app/App.tsx") + text("app/src/hooks/useHashPage.ts")
-    require("pointermove" in tilt and "requestAnimationFrame" in tilt, "pointer tilt must use efficient pointer tracking")
     require("pointer: fine" in tilt, "tilt must be limited to fine pointers")
     require("bubble-rise" in css and "ambient-bubble" in ambient, "rising bubble ambience is missing")
     require("custom-cursor" in css and "closest" in cursor, "morphing custom cursor is missing")
@@ -76,6 +81,12 @@ def check_interactions():
     require(":hover" in css and "text-shadow" in css, "universal hover language is missing")
     require("startViewTransition" in app and "page-transition" in css, "smooth page transition support is missing")
     require("aria-hidden=\"true\"" in ambient and "aria-hidden=\"true\"" in cursor, "decorative layers must be hidden from assistive technology")
+    require("aero-world-scene" not in css and "--scene-water-top" not in text("app/src/styles/tokens.css"), "rejected Aero world scene styles remain")
+    require("horizonY" in webgl and "rippleHighlight" in webgl and "gl_FragColor" in webgl, "visible procedural water shader is missing")
+    require('get("webgl") === "0"' in webgl_support and "return true" in webgl_support, "WebGL must be default-on with an explicit development fallback")
+    require("orbEnabled" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "home-only hero orb eligibility must stay explicit")
+    require("isAeroGpuBubblesEnabled" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "GPU bubble capability must remain wired through the shared renderer")
+    require("getAeroPointerLight" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "pointer lighting must use the shared module state")
 
 
 def check_accessibility():

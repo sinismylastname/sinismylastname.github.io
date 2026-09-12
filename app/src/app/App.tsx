@@ -1,3 +1,4 @@
+import type { AeroEnvironment } from "../data/aeroEnvironment";
 import { useHashPage } from "../hooks/useHashPage";
 import { AppShell } from "../components/AppShell";
 import { HomePage } from "../pages/HomePage";
@@ -6,11 +7,11 @@ import { AboutPage } from "../pages/AboutPage";
 import { ResumePage } from "../pages/ResumePage";
 import { ContactPage } from "../pages/ContactPage";
 
-export function App() {
+export function App({ environment }: { environment: AeroEnvironment }) {
   const { page, navigate } = useHashPage();
 
   return (
-    <AppShell activePage={page} onNavigate={navigate}>
+    <AppShell environment={environment} activePage={page} onNavigate={navigate}>
       {page === "home" && <HomePage onNavigate={navigate} />}
       {page === "work" && <PortfolioPage />}
       {page === "about" && <AboutPage onNavigate={navigate} />}

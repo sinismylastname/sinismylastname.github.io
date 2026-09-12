@@ -16,3 +16,16 @@ export function getSkyStateForHour(hour: number): SkyState {
 export function getSkyStateForDate(date: Date): SkyState {
   return getSkyStateForHour(date.getHours());
 }
+
+export function resolveSkyState({
+  search,
+  date,
+  allowOverride,
+}: {
+  search: string;
+  date: Date;
+  allowOverride: boolean;
+}): SkyState {
+  const skyOverride = allowOverride ? new URLSearchParams(search).get("sky") : null;
+  return isSkyState(skyOverride) ? skyOverride : getSkyStateForDate(date);
+}
