@@ -84,9 +84,11 @@ def check_interactions():
     require("aero-world-scene" not in css and "--scene-water-top" not in text("app/src/styles/tokens.css"), "rejected Aero world scene styles remain")
     require("horizonY" in webgl and "rippleHighlight" in webgl and "gl_FragColor" in webgl, "visible procedural water shader is missing")
     require('get("webgl") === "0"' in webgl_support and "return true" in webgl_support, "WebGL must be default-on with an explicit development fallback")
-    require("orbEnabled" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "home-only hero orb eligibility must stay explicit")
-    require("isAeroGpuBubblesEnabled" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "GPU bubble capability must remain wired through the shared renderer")
+    require("orbEnabled" not in text("app/src/components/AeroEnvironmentCanvas.tsx"), "the optional hero orb prop must remain dormant")
+    require("const bubbleCount = 0;" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "GPU bubbles must remain removed from the standard renderer")
+    require("frameInterval" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "the renderer must use a bounded frame budget")
     require("getAeroPointerLight" in text("app/src/components/AeroEnvironmentCanvas.tsx"), "pointer lighting must use the shared module state")
+    require("AeroIntro" in text("app/src/components/AppShell.tsx") and "aero-intro" in css, "the Aero first-load reveal is missing")
 
 
 def check_accessibility():

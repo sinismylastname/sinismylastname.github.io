@@ -12,11 +12,11 @@ const QUALITY_STORAGE_KEY = "andy-sin-aero-quality-v1";
 const QUALITY_STORAGE_VERSION = 1;
 const QUALITY_STORAGE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const QUALITY_RANK: Record<AeroQualityTier, number> = { low: 0, balanced: 1, high: 2 };
-const MAX_HIGH_RENDER_PIXELS = 5_000_000;
+const MAX_HIGH_RENDER_PIXELS = 3_000_000;
 
 const QUALITY: Readonly<Record<AeroQualityTier, AeroQuality>> = {
-  high: { tier: "high", dprCap: 1.25, waveOctaves: 3, bubbleCount: 6, causticIntensity: 1 },
-  balanced: { tier: "balanced", dprCap: 1, waveOctaves: 2, bubbleCount: 4, causticIntensity: .65 },
+  high: { tier: "high", dprCap: 1, waveOctaves: 2, bubbleCount: 0, causticIntensity: 0 },
+  balanced: { tier: "balanced", dprCap: .9, waveOctaves: 1, bubbleCount: 0, causticIntensity: 0 },
   low: { tier: "low", dprCap: .75, waveOctaves: 1, bubbleCount: 0, causticIntensity: 0 },
 };
 

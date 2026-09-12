@@ -5,14 +5,14 @@ import { getAeroQuality, persistAeroQualityFloor } from "../webgl/aeroQuality";
 import type { AeroQuality } from "../webgl/aeroQuality";
 import { AeroRenderer } from "../webgl/aeroRenderer";
 import { getAeroPointerLight, resetAeroPointerLight, updateAeroPointerLight } from "../webgl/aeroPointerLight";
-import { createAeroGLContext, isAeroGpuBubblesEnabled, isAeroRefractionEnabled, isAeroWebGLEnabled } from "../webgl/aeroWebGLSupport";
+import { createAeroGLContext, isAeroWebGLEnabled } from "../webgl/aeroWebGLSupport";
 
 function getPrintPreference() {
   if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;
   return window.matchMedia("print").matches;
 }
 
-export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { environment: AeroEnvironment; orbEnabled?: boolean }) {
+export function AeroEnvironmentCanvas({ environment }: { environment: AeroEnvironment }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<AeroRenderer | null>(null);
   const environmentRef = useRef(environment);
@@ -50,13 +50,12 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
     let resizeFrame: number | null = null;
     let startedAt: number | null = null;
     let paused = document.visibilityState === "hidden";
-    const gpuBubblesRequested = isAeroGpuBubblesEnabled();
-    const refractionRequested = isAeroRefractionEnabled();
-    const desktopViewport = window.matchMedia?.("(min-width: 900px)") ?? null;
+    const frameInterval = quality.tier === "high" ? 1000 / 45 : quality.tier === "balanced" ? 1000 / 40 : 1000 / 30;
     const pointerViewport = window.matchMedia?.("(pointer: fine)") ?? null;
-    const useGpuOrb = () => orbEnabled && quality.tier !== "low" && Boolean(desktopViewport?.matches);
     const usePointerLight = !reducedMotion && quality.tier !== "low" && Boolean(pointerViewport?.matches);
-    const bubbleCount = gpuBubblesRequested && !reducedMotion && !refractionRequested ? quality.bubbleCount : 0;
+    let lastRenderAt = -Infinity;
+    // Keep the experimental GPU bubble branch dormant; authored CSS bubbles are the only bubble layer.
+    const bubbleCount = 0;
     const cancelAnimation = () => {
       if (animationFrame !== null) {
         cancelAnimationFrame(animationFrame);
@@ -77,7 +76,12 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
     const renderFrame = (timestamp: number) => {
       animationFrame = null;
       if (!renderer || paused) return;
+      if (timestamp - lastRenderAt < frameInterval) {
+        scheduleAnimation();
+        return;
+      }
       if (startedAt === null) startedAt = timestamp;
+      lastRenderAt = timestamp;
       renderer.render((timestamp - startedAt) / 1000, getAeroPointerLight());
       scheduleAnimation();
     };
@@ -106,16 +110,17 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
           return;
         }
         renderer?.dispose();
-        const heroOrbEnabled = useGpuOrb();
-        const heroRefractionEnabled = heroOrbEnabled && refractionRequested && quality.tier === "high" && bubbleCount === 0;
-        const causticsEnabled = quality.causticIntensity > 0;
+        const heroOrbEnabled = false;
+        const heroRefractionEnabled = false;
+        const causticsEnabled = false;
         renderer = new AeroRenderer(canvas, gl, quality, environmentRef.current, bubbleCount, heroOrbEnabled, heroRefractionEnabled, usePointerLight, causticsEnabled);
         persistAeroQualityFloor(quality.tier);
         rendererRef.current = renderer;
         startedAt = null;
+        lastRenderAt = -Infinity;
         canvas.dataset.quality = quality.tier;
         canvas.dataset.state = paused ? "paused" : "ready";
-        canvas.dataset.bubbles = bubbleCount > 0 ? "gpu" : "css";
+        canvas.dataset.bubbles = "css";
         canvas.dataset.orb = heroOrbEnabled ? "gpu" : "css";
         canvas.dataset.refraction = heroRefractionEnabled ? "gpu" : "off";
         renderOnce();
@@ -134,7 +139,6 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
       renderer = null;
       rendererRef.current = null;
       startedAt = null;
-      resetAeroPointerLight();
       canvas.dataset.state = "lost";
     };
     const onContextRestored = () => initialize();
@@ -144,7 +148,6 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
         cancelAnimation();
         cancelResize();
         startedAt = null;
-        resetAeroPointerLight();
         canvas.dataset.state = "paused";
       } else if (renderer) {
         canvas.dataset.state = "ready";
@@ -160,9 +163,6 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
       updateAeroPointerLight(event.clientX, event.clientY);
     };
     const onPointerLeave = () => resetAeroPointerLight();
-    const onMediaChange = () => {
-      if (!paused) initialize();
-    };
 
     initialize();
     const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(scheduleResize);
@@ -176,8 +176,6 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
       window.addEventListener("pointerleave", onPointerLeave, { passive: true });
       window.addEventListener("blur", onPointerLeave, { passive: true });
     }
-    desktopViewport?.addEventListener?.("change", onMediaChange);
-    document.addEventListener("pointerleave", onPointerLeave, { passive: true });
 
     return () => {
       cancelAnimation();
@@ -185,7 +183,6 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
       resizeObserver?.disconnect();
       window.removeEventListener("resize", scheduleResize);
       document.removeEventListener("visibilitychange", onVisibilityChange);
-      document.removeEventListener("pointerleave", onPointerLeave);
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
       if (usePointerLight) {
@@ -193,12 +190,11 @@ export function AeroEnvironmentCanvas({ environment, orbEnabled = false }: { env
         window.removeEventListener("pointerleave", onPointerLeave);
         window.removeEventListener("blur", onPointerLeave);
       }
-      desktopViewport?.removeEventListener?.("change", onMediaChange);
       resetAeroPointerLight();
       renderer?.dispose();
       if (rendererRef.current === renderer) rendererRef.current = null;
     };
-  }, [enabled, isPrinting, quality, reducedMotion, orbEnabled]);
+  }, [enabled, isPrinting, quality, reducedMotion]);
 
   if (!enabled || isPrinting || quality === null) return null;
   return <canvas ref={canvasRef} className="aero-environment-canvas" aria-hidden="true" data-state="pending" />;

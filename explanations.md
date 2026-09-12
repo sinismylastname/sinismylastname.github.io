@@ -12,7 +12,7 @@ The site combines:
 - Hash-based navigation between Home, Portfolio, About, Resume, and Contact.
 - A Frutiger Aero visual system: aqua sky colors, green accents, bubbles, clouds, waves, translucent surfaces, and glass-like controls.
 - Interactive glass cards and buttons.
-- A progressive raw-WebGL environment canvas for procedural water, GPU bubbles, caustics, pointer lighting, and a home-only reflective orb.
+- A progressive raw-WebGL environment canvas for procedural water with dormant experimental branches kept out of the normal rendering path.
 - A custom cursor for fine-pointer desktop devices.
 - Contextual build notes shown in a modal from the StarterPack project.
 - A custom desktop scroll-progress control that falls back to the native scrollbar on mobile and coarse-pointer devices.
@@ -147,7 +147,7 @@ The page transition uses `requestAnimationFrame`, which schedules visual updates
 
 The `key={activePage}` on `.page-transition` causes the page wrapper to remount when the page changes, allowing the page-entry animation to run again.
 
-The `AeroEnvironmentCanvas` is a single `aria-hidden` canvas shared by all supported hash pages. It is enabled by default unless `VITE_AERO_WEBGL=false` or development `?webgl=0` is used, and it keeps the CSS background and glass layers as the fallback. The renderer uses one fullscreen triangle and one visible RAF; reduced motion renders one static frame, while unsupported WebGL, print, hidden visibility, context loss, low-quality paths, and cleanup remove or pause the enhancement without changing page semantics. The standard path combines water, quality-gated GPU bubbles, subtle caustics, shared pointer lighting, and a desktop home-only reflective orb. The analytic refraction branch remains a development-only comparison (`?refraction=1`) and is not a production default.
+The `AeroEnvironmentCanvas` is a single `aria-hidden` canvas shared by all supported hash pages. It is enabled by default unless `VITE_AERO_WEBGL=false` or development `?webgl=0` is used, and it keeps the CSS background and glass layers as the fallback. The renderer uses one fullscreen triangle, a bounded animation cadence, and a fixed per-device render budget; reduced motion renders one static frame, while unsupported WebGL, print, hidden visibility, context loss, low-quality paths, and cleanup remove or pause the enhancement without changing page semantics. The standard path combines procedural water, a lightweight cursor-driven water highlight, and the authored CSS bubble ambience. GPU bubbles, caustics, the hero orb, and analytic refraction remain dormant experiments so page navigation does not recompile the background renderer.
 
 The typed WebGL environment and CSS environment variables retain the same internal four-state model (`morning`, `midday`, `sunset`, `night`) for future experiments. Production currently selects `midday` once, with no clock or `?sky=` override, and their material values remain separate projections so CSS can render when WebGL is absent.
 

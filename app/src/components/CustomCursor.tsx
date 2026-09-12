@@ -78,8 +78,6 @@ export function CustomCursor({ enabled }: { enabled: boolean }) {
         active: desired.active,
         visible: desired.visible,
       };
-      document.documentElement.style.setProperty("--pointer-light-x", `${(lastPointer.x / Math.max(window.innerWidth, 1)) * 100}%`);
-      document.documentElement.style.setProperty("--pointer-light-y", `${(lastPointer.y / Math.max(window.innerHeight, 1)) * 100}%`);
       cursor.style.setProperty("--cursor-x", `${current.x}px`);
       cursor.style.setProperty("--cursor-y", `${current.y}px`);
       cursor.style.setProperty("--cursor-width", `${current.width}px`);

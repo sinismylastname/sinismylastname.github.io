@@ -3,6 +3,7 @@ import type { AeroEnvironment } from "../data/aeroEnvironment";
 import type { PageId } from "../data/site";
 import { AeroEnvironmentCanvas } from "./AeroEnvironmentCanvas";
 import { AmbientBackground } from "./AmbientBackground";
+import { AeroIntro } from "./AeroIntro";
 import { CursorModeToggle } from "./CursorModeToggle";
 import { CustomCursor } from "./CustomCursor";
 import { Navigation } from "./Navigation";
@@ -47,8 +48,9 @@ export function AppShell({
 
   return (
     <div className="app-shell" data-cursor-mode={nativeCursor ? "native" : "smooth"}>
-      <AeroEnvironmentCanvas environment={environment} orbEnabled={activePage === "home"} />
+      <AeroEnvironmentCanvas environment={environment} />
       <AmbientBackground />
+      <AeroIntro />
       <ScrollProgress />
       <CustomCursor enabled={!nativeCursor} />
       <CursorModeToggle nativeCursor={nativeCursor} onNativeCursorChange={setNativeCursor} />

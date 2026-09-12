@@ -46,8 +46,6 @@ export function usePointerTilt<T extends HTMLElement>(enabled = true) {
       resetPending = false;
       element.style.setProperty("--pointer-x", `${nextValues.x}%`);
       element.style.setProperty("--pointer-y", `${nextValues.y}%`);
-      element.style.setProperty("--light-x", `${nextValues.x}%`);
-      element.style.setProperty("--light-y", `${nextValues.y}%`);
       element.style.setProperty("--tilt-x", `${nextValues.tiltX}deg`);
       element.style.setProperty("--tilt-y", `${nextValues.tiltY}deg`);
     };

@@ -18,6 +18,11 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
 
   return (
     <GlassSurface as="article" variant="card" interactive className={`project-card ${featured ? "is-featured" : ""}`} style={projectStyle}>
+      <div className="project-window-bar" aria-hidden="true">
+        <span className="window-light window-light-close" />
+        <span className="window-light window-light-minimize" />
+        <span className="window-light window-light-maximize" />
+      </div>
       <div className="project-media">
         <img src={project.image} alt={project.imageAlt} width="640" height="400" loading="lazy" />
         <span className="project-category"><AeroIcon kind={project.category} size={14} /><span>{project.category}</span></span>

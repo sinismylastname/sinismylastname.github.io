@@ -7,6 +7,8 @@
   --sky: #4fd4ff;
   --aqua: #18c8cf;
   --deep-aqua: #00749b;
+  --aero-blue: #087fb8;
+  --aero-cobalt: #07518a;
   --lime: #b9f34f;
   --cloud: #f4fdff;
 
@@ -37,13 +39,13 @@
   --material-heavy-shadow: var(--shadow-glass);
   --material-acrylic-bg: var(--glass-soft);
   --material-acrylic-rim: rgba(255,255,255,.86);
-  --material-acrylic-edge: rgba(216,239,207,.3);
-  --material-acrylic-shadow: 0 14px 28px rgba(54,78,61,.18), 0 4px 10px rgba(255,255,255,.28), inset 0 1px 1px rgba(255,255,255,.94), inset 0 -2px 5px rgba(62,91,66,.13);
+  --material-acrylic-edge: rgba(116,214,240,.32);
+  --material-acrylic-shadow: 0 14px 28px rgba(7,81,138,.2), 0 4px 10px rgba(255,255,255,.28), inset 0 1px 1px rgba(255,255,255,.94), inset 0 -2px 5px rgba(7,81,138,.16);
   --material-plastic-bg: rgba(251,255,246,.74);
   --material-plastic-highlight: rgba(255,255,255,.88);
-  --material-plastic-shadow: rgba(59,88,59,.22);
+  --material-plastic-shadow: rgba(7,81,138,.26);
   --material-enamel-highlight: rgba(255,255,255,.92);
-  --material-enamel-rim: rgba(0,112,154,.34);
+  --material-enamel-rim: rgba(7,81,138,.46);
   --material-lens-highlight: rgba(255,255,255,.94);
   --material-lens-tint: rgba(75,218,255,.25);
 
@@ -57,16 +59,16 @@
   --glass-strong: rgba(255,255,255, calc(.58 * var(--aero-glass-opacity, .72)));
   --glass-soft: rgba(255,255,255, calc(.68 * var(--aero-acrylic-opacity, 1)));
   --edge-light: rgba(255, 255, 255, 0.96);
-  --edge-shadow: rgba(64, 84, 62, 0.36);
-  --focus-ring: #4b7600;
-  --shadow-glass: 0 24px 46px rgba(54,78,61,.2), 0 4px 10px rgba(255,255,255,.46), inset 0 1px 1px rgba(255,255,255,.98), inset 0 -2px 5px rgba(62,91,66,.16);
-  --shadow-glass-hover: 0 30px 56px rgba(54,78,61,.27), 0 7px 16px rgba(255,255,255,.54), inset 0 1px 1px rgba(255,255,255,1), inset 0 -3px 8px rgba(62,91,66,.2);
-  --shadow-soft: 0 14px 28px rgba(54,78,61,.18), inset 0 1px 1px rgba(255,255,255,.94);
+  --edge-shadow: rgba(7, 63, 112, .4);
+  --focus-ring: #087fb8;
+  --shadow-glass: 0 24px 46px rgba(7,81,138,.22), 0 4px 10px rgba(255,255,255,.46), inset 0 1px 1px rgba(255,255,255,.98), inset 0 -2px 5px rgba(7,81,138,.18);
+  --shadow-glass-hover: 0 30px 56px rgba(7,81,138,.3), 0 7px 16px rgba(255,255,255,.54), inset 0 1px 1px rgba(255,255,255,1), inset 0 -3px 8px rgba(7,81,138,.24);
+  --shadow-soft: 0 14px 28px rgba(7,81,138,.2), inset 0 1px 1px rgba(255,255,255,.94);
 
   /* Fixed production Aero preset. */
   --aero-glass-opacity: .72;
   --aero-glass-reflection: 1.5;
-  --aero-glass-blur: .55;
+  --aero-glass-blur: .35;
   --aero-upper-rim: 1.5;
   --aero-green-bounce: 1;
   --aero-sky-saturation: 1.2;

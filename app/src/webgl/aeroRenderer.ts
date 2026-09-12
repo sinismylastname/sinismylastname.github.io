@@ -16,7 +16,6 @@ const FRAGMENT_SHADER = `
   precision mediump float;
   uniform vec2 uResolution;
   uniform float uTime;
-  uniform float uWaveOctaves;
   uniform vec3 uSkyTop;
   uniform vec3 uSkyHorizon;
   uniform vec3 uWaterColor;
@@ -32,15 +31,46 @@ const FRAGMENT_SHADER = `
   uniform float uPointerLightStrength;
   uniform float uBubbleCount;
 
-  float waveHeight(vec2 point, float time) {
-    float wave = sin(dot(point, vec2(1.04, 0.22)) * 2.7 + time * 0.16) * 0.040;
-    if (uWaveOctaves > 1.5) {
-      wave += sin(dot(point, vec2(-0.36, 1.18)) * 2.1 + time * 0.11) * 0.025;
-    }
-    if (uWaveOctaves > 2.5) {
-      wave += cos(dot(point, vec2(1.55, -0.72)) * 2.4 - time * 0.08) * 0.017;
-    }
-    return wave;
+  vec3 waveSample(vec2 point, float time) {
+    float height = 0.0;
+    float gradientX = 0.0;
+    float gradientY = 0.0;
+
+    vec2 firstDirection = vec2(1.04, 0.22);
+    float firstFrequency = 2.7;
+    float firstPhase = dot(point, firstDirection) * firstFrequency + time * 0.16;
+    float firstSine = sin(firstPhase);
+    float firstAmplitude = 0.040;
+    height += firstSine * firstAmplitude;
+    float firstGradient = cos(firstPhase) * firstAmplitude * firstFrequency;
+    gradientX += firstGradient * firstDirection.x;
+    gradientY += firstGradient * firstDirection.y;
+
+    #if AERO_WAVE_OCTAVES > 1
+    vec2 secondDirection = vec2(-0.36, 1.18);
+    float secondFrequency = 2.1;
+    float secondPhase = dot(point, secondDirection) * secondFrequency + time * 0.11;
+    float secondSine = sin(secondPhase);
+    float secondAmplitude = 0.025;
+    height += secondSine * secondAmplitude;
+    float secondGradient = cos(secondPhase) * secondAmplitude * secondFrequency;
+    gradientX += secondGradient * secondDirection.x;
+    gradientY += secondGradient * secondDirection.y;
+    #endif
+
+    #if AERO_WAVE_OCTAVES > 2
+    vec2 thirdDirection = vec2(1.55, -0.72);
+    float thirdFrequency = 2.4;
+    float thirdPhase = dot(point, thirdDirection) * thirdFrequency - time * 0.08;
+    float thirdCosine = cos(thirdPhase);
+    float thirdAmplitude = 0.017;
+    height += thirdCosine * thirdAmplitude;
+    float thirdGradient = -sin(thirdPhase) * thirdAmplitude * thirdFrequency;
+    gradientX += thirdGradient * thirdDirection.x;
+    gradientY += thirdGradient * thirdDirection.y;
+    #endif
+
+    return vec3(height, gradientX, gradientY);
   }
 
   #ifdef AERO_CAUSTICS
@@ -117,21 +147,17 @@ const FRAGMENT_SHADER = `
     vec2 point = (uv - vec2(0.5, horizonY)) * vec2(aspect, 1.0);
     point.y *= mix(1.15, 0.72, depth);
 
-    float wave = waveHeight(point, uTime);
-    float sampleStep = 0.025;
-    float waveX = waveHeight(point + vec2(sampleStep, 0.0), uTime) - wave;
-    float waveY = waveHeight(point + vec2(0.0, sampleStep), uTime) - wave;
-    vec3 normal = normalize(vec3(-waveX * 30.0, -waveY * 30.0, 1.0));
-
-    #ifdef AERO_POINTER_LIGHT
-    float pointerRipple = exp(-length(uv - uPointerLightPosition) * 9.0) * sin((uv.x + uv.y) * 44.0 + uTime * 0.8) * uPointerLightStrength;
-    normal = normalize(normal + vec3(pointerRipple * 0.16, pointerRipple * 0.08, 0.0));
-    #endif
+    vec3 waveSampled = waveSample(point, uTime);
+    float wave = waveSampled.x;
+    vec3 normal = normalize(vec3(-waveSampled.y * 30.0, -waveSampled.z * 30.0, 1.0));
 
     vec3 sunDirection = normalize(vec3(uSunDirection.x, max(uSunDirection.y, 0.08), 0.68));
     float sunLight = clamp(uSunIntensity * (0.72 + 0.28 * max(uSunDirection.y, 0.0)), 0.0, 1.2);
-    float broadSpecular = pow(max(dot(normal, sunDirection), 0.0), 4.0) * sunLight;
-    float tightSpecular = pow(max(dot(normal, sunDirection), 0.0), 18.0) * sunLight;
+    float sunDot = max(dot(normal, sunDirection), 0.0);
+    float sunDotSquared = sunDot * sunDot;
+    float broadSpecular = sunDotSquared * sunDotSquared * sunLight;
+    float tightSpecular = sunDotSquared * sunDotSquared;
+    tightSpecular *= tightSpecular * sunDotSquared * sunLight;
     float movingReflection = 0.5 + 0.5 * sin(point.x * 6.0 + point.y * 3.5 + uTime * 0.14);
     float reflectionRibbon = pow(movingReflection, 7.0) * (0.35 + 0.65 * broadSpecular);
     float rippleSignal = sin(point.y * 18.0 + sin(point.x * 2.4 + uTime * 0.10) * 1.4 + uTime * 0.08);
@@ -148,10 +174,9 @@ const FRAGMENT_SHADER = `
     water += uGroundBounce * (0.025 + depth * 0.075);
 
     #ifdef AERO_POINTER_LIGHT
-    vec2 pointerOffset = (point - (uPointerLightPosition - vec2(0.5, horizonY)) * vec2(aspect, 1.0));
-    float pointerDistance = length(pointerOffset);
-    float pointerSpecular = pow(max(0.0, 1.0 - pointerDistance * 1.8), 5.0) * uPointerLightStrength;
-    water += uSpecularColor * pointerSpecular * 0.34;
+    float pointerDistance = length(uv - uPointerLightPosition);
+    float pointerGlow = 1.0 - smoothstep(0.0, 0.46, pointerDistance);
+    water += uSpecularColor * pointerGlow * uPointerLightStrength * 0.24;
     #endif
 
     #ifdef AERO_CAUSTICS
@@ -206,9 +231,10 @@ function compileShader(gl: AeroGLContext, type: number, source: string) {
   return shader;
 }
 
-function createProgram(gl: AeroGLContext, gpuBubblesEnabled: boolean, causticsEnabled: boolean, heroOrbEnabled: boolean, refractionEnabled: boolean, pointerLightEnabled: boolean) {
+function createProgram(gl: AeroGLContext, waveOctaves: number, gpuBubblesEnabled: boolean, causticsEnabled: boolean, heroOrbEnabled: boolean, refractionEnabled: boolean, pointerLightEnabled: boolean) {
   const vertexShader = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
   const defines = [
+    `#define AERO_WAVE_OCTAVES ${Math.max(1, Math.min(3, Math.floor(waveOctaves)))}`,
     gpuBubblesEnabled ? "#define AERO_GPU_BUBBLES" : "",
     causticsEnabled ? "#define AERO_CAUSTICS" : "",
     heroOrbEnabled ? "#define AERO_HERO_ORB" : "",
@@ -235,7 +261,6 @@ function createProgram(gl: AeroGLContext, gpuBubblesEnabled: boolean, causticsEn
 type EnvironmentUniformLocations = {
   resolution: WebGLUniformLocation | null;
   time: WebGLUniformLocation | null;
-  waveOctaves: WebGLUniformLocation | null;
   skyTop: WebGLUniformLocation | null;
   skyHorizon: WebGLUniformLocation | null;
   waterColor: WebGLUniformLocation | null;
@@ -288,7 +313,7 @@ export class AeroRenderer {
     this.environment = environment;
     this.bubbleCount = Math.max(0, Math.min(6, Math.floor(bubbleCount)));
     this.pointerLightEnabled = pointerLightEnabled;
-    this.program = createProgram(gl, this.bubbleCount > 0, causticsEnabled, heroOrbEnabled, refractionEnabled, pointerLightEnabled);
+    this.program = createProgram(gl, quality.waveOctaves, this.bubbleCount > 0, causticsEnabled, heroOrbEnabled, refractionEnabled, pointerLightEnabled);
     const buffer = gl.createBuffer();
     if (!buffer) {
       gl.deleteProgram(this.program);
@@ -299,7 +324,6 @@ export class AeroRenderer {
     this.uniformLocations = {
       resolution: gl.getUniformLocation(this.program, "uResolution"),
       time: gl.getUniformLocation(this.program, "uTime"),
-      waveOctaves: gl.getUniformLocation(this.program, "uWaveOctaves"),
       skyTop: gl.getUniformLocation(this.program, "uSkyTop"),
       skyHorizon: gl.getUniformLocation(this.program, "uSkyHorizon"),
       waterColor: gl.getUniformLocation(this.program, "uWaterColor"),
@@ -360,7 +384,6 @@ export class AeroRenderer {
     if (this.pointerLightEnabled) this.updatePointerLight(pointerLight);
 
     if (locations.time !== null) gl.uniform1f(locations.time, timeSeconds);
-    if (locations.waveOctaves !== null) gl.uniform1f(locations.waveOctaves, this.quality.waveOctaves);
     if (locations.pointerLightPosition !== null) gl.uniform2f(locations.pointerLightPosition, this.pointerLightX, this.pointerLightY);
     if (locations.pointerLightStrength !== null) gl.uniform1f(locations.pointerLightStrength, this.pointerLightStrength);
     if (locations.bubbleCount !== null) gl.uniform1f(locations.bubbleCount, this.bubbleCount);
