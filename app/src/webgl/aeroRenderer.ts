@@ -294,6 +294,9 @@ export class AeroRenderer {
   private pointerLightX = 0.5;
   private pointerLightY = 0.5;
   private pointerLightStrength = 0;
+  private lastDisplayWidth = 0;
+  private lastDisplayHeight = 0;
+  private lastDpr = 0;
   private environment: AeroEnvironment;
 
   constructor(
@@ -349,10 +352,16 @@ export class AeroRenderer {
     this.environment = environment;
   }
 
-  resize() {
+  resize(force = false) {
     const displayWidth = Math.max(1, this.canvas.clientWidth || window.innerWidth);
     const displayHeight = Math.max(1, this.canvas.clientHeight || window.innerHeight);
     const dpr = Math.min(window.devicePixelRatio || 1, this.quality.dprCap);
+    const widthChanged = Math.abs(displayWidth - this.lastDisplayWidth) > 2;
+    const heightChanged = Math.abs(displayHeight - this.lastDisplayHeight) > 80;
+    const dprChanged = Math.abs(dpr - this.lastDpr) > 0.01;
+    if (!force && this.lastDisplayWidth > 0 && !widthChanged && !heightChanged && !dprChanged) {
+      return false;
+    }
     const width = Math.max(1, Math.floor(displayWidth * dpr));
     const height = Math.max(1, Math.floor(displayHeight * dpr));
     if (this.canvas.width !== width || this.canvas.height !== height) {
@@ -360,6 +369,10 @@ export class AeroRenderer {
       this.canvas.height = height;
     }
     this.gl.viewport(0, 0, width, height);
+    this.lastDisplayWidth = displayWidth;
+    this.lastDisplayHeight = displayHeight;
+    this.lastDpr = dpr;
+    return true;
   }
 
   private setColor(location: WebGLUniformLocation | null, color: Color3) {

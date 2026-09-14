@@ -48,6 +48,8 @@ export function AeroEnvironmentCanvas({ environment }: { environment: AeroEnviro
     let renderer: AeroRenderer | null = null;
     let animationFrame: number | null = null;
     let resizeFrame: number | null = null;
+    let resizeSettleTimer: number | null = null;
+    let resizePending = false;
     let startedAt: number | null = null;
     let paused = document.visibilityState === "hidden";
     const frameInterval = quality.tier === "high" ? 1000 / 45 : quality.tier === "balanced" ? 1000 / 40 : 1000 / 30;
@@ -67,6 +69,10 @@ export function AeroEnvironmentCanvas({ environment }: { environment: AeroEnviro
         cancelAnimationFrame(resizeFrame);
         resizeFrame = null;
       }
+      if (resizeSettleTimer !== null) {
+        window.clearTimeout(resizeSettleTimer);
+        resizeSettleTimer = null;
+      }
     };
     const scheduleAnimation = () => {
       if (animationFrame === null && renderer && !paused && !reducedMotion) {
@@ -76,7 +82,15 @@ export function AeroEnvironmentCanvas({ environment }: { environment: AeroEnviro
     const renderFrame = (timestamp: number) => {
       animationFrame = null;
       if (!renderer || paused) return;
-      if (timestamp - lastRenderAt < frameInterval) {
+      // Apply deferred canvas-size changes immediately before drawing. This
+      // prevents ResizeObserver from clearing the backbuffer between frames.
+      let resized = false;
+      if (resizePending) {
+        renderer.resize(true);
+        resizePending = false;
+        resized = true;
+      }
+      if (!resized && timestamp - lastRenderAt < frameInterval) {
         scheduleAnimation();
         return;
       }
@@ -87,18 +101,31 @@ export function AeroEnvironmentCanvas({ environment }: { environment: AeroEnviro
     };
     const renderOnce = () => {
       if (!renderer || paused) return;
-      renderer.resize();
+      if (resizePending) {
+        renderer.resize(true);
+        resizePending = false;
+      }
       renderer.render(0, getAeroPointerLight());
       scheduleAnimation();
     };
-    const scheduleResize = () => {
+    const scheduleReducedMotionResize = () => {
       if (resizeFrame !== null) return;
       resizeFrame = requestAnimationFrame(() => {
         resizeFrame = null;
-        if (!renderer || paused) return;
-        renderer.resize();
-        if (reducedMotion) renderer.render(0, getAeroPointerLight());
+        renderOnce();
       });
+    };
+    const scheduleResize = () => {
+      // Safari can emit a burst of height-only observations while its browser
+      // chrome expands/collapses during scroll. Keep the old GPU buffer while
+      // that settles, then resize and redraw together in one frame.
+      if (resizeSettleTimer !== null) window.clearTimeout(resizeSettleTimer);
+      resizeSettleTimer = window.setTimeout(() => {
+        resizeSettleTimer = null;
+        resizePending = true;
+        if (reducedMotion) scheduleReducedMotionResize();
+        else scheduleAnimation();
+      }, 180);
     };
     const initialize = () => {
       try {
@@ -123,6 +150,7 @@ export function AeroEnvironmentCanvas({ environment }: { environment: AeroEnviro
         canvas.dataset.bubbles = "css";
         canvas.dataset.orb = heroOrbEnabled ? "gpu" : "css";
         canvas.dataset.refraction = heroRefractionEnabled ? "gpu" : "off";
+        resizePending = true;
         renderOnce();
       } catch {
         renderer?.dispose();

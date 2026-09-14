@@ -203,7 +203,7 @@ p { margin-top: 0; }
 .ambient-bubble { animation-duration: calc(var(--bubble-duration,22s) / var(--aero-bubble-speed,.88)); }
 
 
-.aero-environment-canvas { position: fixed; inset: 0; z-index: -2; display: block; width: 100%; height: 100%; pointer-events: none; background: transparent; opacity: 0; }
+.aero-environment-canvas { position: fixed; inset: 0; z-index: -2; display: block; width: 100%; height: 100vh; height: 100lvh; pointer-events: none; background: transparent; opacity: 0; }
 .aero-environment-canvas[data-state="ready"] { opacity: 1; }
 .aero-environment-canvas[data-state="ready"] + .ambient-background .ambient-wave { display: none; }
 .aero-environment-canvas[data-state="ready"][data-bubbles="gpu"] + .ambient-background .ambient-bubble { display: none; }
